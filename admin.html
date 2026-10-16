@@ -1,0 +1,598 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GG Admin | Gossip Girl</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+
+  <style>
+    :root {
+      --gold: #d4af37;
+      --bg: #080808;
+      --panel: #141414;
+      --muted: #aaa;
+      --border: #333;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: #f5f5f5;
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      color: var(--gold);
+      letter-spacing: 3px;
+      font-size: 21px;
+      font-weight: bold;
+    }
+
+    .brand span {
+      display: block;
+      color: white;
+      font-size: 11px;
+      letter-spacing: 4px;
+      margin-top: 6px;
+    }
+
+    main {
+      width: min(1050px, 92%);
+      margin: 40px auto;
+    }
+
+    h1 {
+      font-size: clamp(26px, 5vw, 40px);
+      margin-bottom: 8px;
+    }
+
+    h1 em {
+      color: var(--gold);
+      font-style: normal;
+    }
+
+    .muted { color: var(--muted); line-height: 1.6; }
+
+    .panel, .gossip-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .login-panel {
+      max-width: 440px;
+      margin: 55px auto;
+    }
+
+    label {
+      display: block;
+      margin: 18px 0 8px;
+      color: #ddd;
+      font-size: 14px;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      background: #080808;
+      border: 1px solid #444;
+      border-radius: 7px;
+      color: white;
+      font-size: 15px;
+    }
+
+    input:focus {
+      outline: 1px solid var(--gold);
+      border-color: var(--gold);
+    }
+
+    button {
+      padding: 11px 15px;
+      border: 1px solid var(--gold);
+      border-radius: 7px;
+      cursor: pointer;
+      font-weight: bold;
+      background: var(--gold);
+      color: #080808;
+      transition: opacity .2s;
+    }
+
+    button:hover { opacity: .85; }
+    button:disabled { opacity: .5; cursor: wait; }
+
+    .secondary {
+      color: white;
+      background: transparent;
+      border-color: #555;
+    }
+
+    .danger {
+      color: #ff9b9b;
+      background: transparent;
+      border-color: #8b3636;
+    }
+
+    .top-actions, .tabs, .card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .tabs { margin: 26px 0; }
+
+    .tabs button {
+      background: transparent;
+      color: #ddd;
+      border-color: #444;
+    }
+
+    .tabs button.active {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: #080808;
+    }
+
+    .gossip-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    .gossip-card {
+      overflow-wrap: anywhere;
+    }
+
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .nickname {
+      font-weight: bold;
+      color: var(--gold);
+    }
+
+    .status {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #ddd;
+      border: 1px solid #555;
+      padding: 5px 8px;
+      border-radius: 20px;
+    }
+
+    .status.approved { color: #8ee0a4; border-color: #39764a; }
+    .status.rejected { color: #ff9b9b; border-color: #8b3636; }
+    .status.pending { color: #f0cf70; border-color: #8d762e; }
+
+    .message {
+      white-space: pre-wrap;
+      line-height: 1.7;
+      margin: 20px 0;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 16px;
+    }
+
+    .notice {
+      padding: 13px;
+      margin: 15px 0;
+      border-radius: 7px;
+      background: #211d10;
+      color: #f0cf70;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .notice.error {
+      background: #281313;
+      color: #ffaaaa;
+    }
+
+    .hidden { display: none !important; }
+
+    .empty {
+      padding: 40px 16px;
+      text-align: center;
+      color: var(--muted);
+      border: 1px dashed #444;
+      border-radius: 12px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 35px 15px;
+      color: #777;
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="brand">
+      GOSSIP GIRL
+      <span>ADMIN CONTROL PANEL</span>
+    </div>
+
+    <div class="top-actions">
+      <a href="gossip.html" style="color:var(--gold)">View public page</a>
+      <button id="logoutBtn" class="secondary hidden">Log out</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="loginSection" class="panel login-panel">
+      <h1>Welcome, <em>Admin.</em></h1>
+      <p class="muted">Sign in to review submissions and manage what gets published.</p>
+
+      <form id="loginForm">
+        <label for="email">Email</label>
+        <input id="email" type="email" autocomplete="username" required>
+
+        <label for="password">Password</label>
+        <input id="password" type="password" autocomplete="current-password" required>
+
+        <button id="loginBtn" type="submit" style="width:100%;margin-top:22px">
+          Sign in
+        </button>
+      </form>
+
+      <div id="loginNotice" class="notice hidden" role="status"></div>
+    </section>
+
+    <section id="dashboard" class="hidden">
+      <h1>Gossip <em>Control.</em></h1>
+      <p class="muted">Review every submission before it reaches the public page.</p>
+
+      <div id="dashboardNotice" class="notice hidden" role="status"></div>
+
+      <div class="tabs" id="tabs">
+        <button class="active" data-filter="pending">Pending</button>
+        <button data-filter="approved">Approved</button>
+        <button data-filter="rejected">Rejected</button>
+        <button data-filter="all">All</button>
+      </div>
+
+      <div class="top-actions" style="margin-bottom:20px">
+        <button id="refreshBtn" class="secondary">Refresh submissions</button>
+        <span id="count" class="muted"></span>
+      </div>
+
+      <div id="gossipList" class="gossip-list">
+        <div class="empty">Loading submissions...</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>GOSSIP GIRL · PRIVATE ADMIN AREA</footer>
+
+  <script>
+    (() => {
+      const config = window.GG_CONFIG;
+
+      if (!config?.supabaseUrl || !config?.supabaseAnonKey) {
+        document.getElementById("loginNotice").textContent =
+          "Supabase configuration is missing. Check config.js.";
+        document.getElementById("loginNotice").classList.remove("hidden");
+        return;
+      }
+
+      const db = window.supabase.createClient(
+        config.supabaseUrl,
+        config.supabaseAnonKey
+      );
+
+      const loginSection = document.getElementById("loginSection");
+      const dashboard = document.getElementById("dashboard");
+      const loginForm = document.getElementById("loginForm");
+      const loginBtn = document.getElementById("loginBtn");
+      const loginNotice = document.getElementById("loginNotice");
+      const dashboardNotice = document.getElementById("dashboardNotice");
+      const logoutBtn = document.getElementById("logoutBtn");
+      const gossipList = document.getElementById("gossipList");
+      const count = document.getElementById("count");
+
+      let currentFilter = "pending";
+      let busy = false;
+
+      function showNotice(element, message, isError = false) {
+        element.textContent = message;
+        element.classList.remove("hidden", "error");
+        if (isError) element.classList.add("error");
+      }
+
+      function hideNotice(element) {
+        element.classList.add("hidden");
+      }
+
+      function escapeHTML(value) {
+        return String(value ?? "").replace(/[&<>"']/g, char => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;"
+        })[char]);
+      }
+
+      function formatDate(value) {
+        if (!value) return "Date unavailable";
+        const date = new Date(value);
+        return Number.isNaN(date.getTime())
+          ? "Date unavailable"
+          : date.toLocaleString();
+      }
+
+      function showLogin() {
+        loginSection.classList.remove("hidden");
+        dashboard.classList.add("hidden");
+        logoutBtn.classList.add("hidden");
+      }
+
+      function showDashboard() {
+        loginSection.classList.add("hidden");
+        dashboard.classList.remove("hidden");
+        logoutBtn.classList.remove("hidden");
+      }
+
+      async function checkAdmin() {
+        const { data: { session }, error: sessionError } =
+          await db.auth.getSession();
+
+        if (sessionError) throw sessionError;
+
+        if (!session) {
+          showLogin();
+          return false;
+        }
+
+        // This RPC must exist in the Supabase project and return true
+        // only when the signed-in user is listed in public.gg_admins.
+        const { data: isAdmin, error } = await db.rpc("gg_is_admin");
+
+        if (error) {
+          showLogin();
+          showNotice(
+            loginNotice,
+            "Could not verify admin access. Check that the gg_is_admin() SQL function exists and that its permissions are configured correctly.",
+            true
+          );
+          return false;
+        }
+
+        if (isAdmin !== true) {
+          await db.auth.signOut();
+          showLogin();
+          showNotice(
+            loginNotice,
+            "This account is not authorized as an admin. Check the gg_admins table.",
+            true
+          );
+          return false;
+        }
+
+        showDashboard();
+        hideNotice(loginNotice);
+        return true;
+      }
+
+      async function loadSubmissions() {
+        if (busy) return;
+        busy = true;
+        hideNotice(dashboardNotice);
+        gossipList.innerHTML = '<div class="empty">Loading submissions...</div>';
+
+        try {
+          let query = db
+            .from("gg_submissions")
+            .select("id, nickname, message, status, created_at")
+            .order("created_at", { ascending: false });
+
+          if (currentFilter !== "all") {
+            query = query.eq("status", currentFilter);
+          }
+
+          const { data, error } = await query;
+          if (error) throw error;
+
+          count.textContent = `${data.length} submission${data.length === 1 ? "" : "s"}`;
+
+          if (!data.length) {
+            gossipList.innerHTML =
+              '<div class="empty">No submissions in this section yet.</div>';
+            return;
+          }
+
+          gossipList.innerHTML = data.map(item => {
+            const status = ["pending", "approved", "rejected"].includes(item.status)
+              ? item.status
+              : "pending";
+
+            let actions = "";
+
+            if (status !== "approved") {
+              actions += `<button data-action="approved" data-id="${escapeHTML(item.id)}">Approve</button>`;
+            }
+
+            if (status !== "rejected") {
+              actions += `<button class="danger" data-action="rejected" data-id="${escapeHTML(item.id)}">Reject</button>`;
+            }
+
+            if (status !== "pending") {
+              actions += `<button class="secondary" data-action="pending" data-id="${escapeHTML(item.id)}">Unpublish / Reset</button>`;
+            }
+
+            return `
+              <article class="gossip-card">
+                <div class="card-head">
+                  <span class="nickname">${escapeHTML(item.nickname || "Anonymous")}</span>
+                  <span class="status ${status}">${escapeHTML(status)}</span>
+                </div>
+                <p class="message">${escapeHTML(item.message)}</p>
+                <div class="meta">Submitted: ${escapeHTML(formatDate(item.created_at))}</div>
+                <div class="card-actions">${actions}</div>
+              </article>
+            `;
+          }).join("");
+        } catch (error) {
+          gossipList.innerHTML =
+            '<div class="empty">Could not load submissions.</div>';
+          showNotice(
+            dashboardNotice,
+            "Failed to load submissions: " + (error.message || "Unknown error"),
+            true
+          );
+        } finally {
+          busy = false;
+        }
+      }
+
+      loginForm.addEventListener("submit", async event => {
+        event.preventDefault();
+        loginBtn.disabled = true;
+        loginBtn.textContent = "Signing in...";
+        hideNotice(loginNotice);
+
+        try {
+          const email = document.getElementById("email").value.trim();
+          const password = document.getElementById("password").value;
+
+          const { error } = await db.auth.signInWithPassword({ email, password });
+          if (error) throw error;
+
+          const authorized = await checkAdmin();
+          if (authorized) await loadSubmissions();
+        } catch (error) {
+          showNotice(
+            loginNotice,
+            error.message || "Sign-in failed. Check your email and password.",
+            true
+          );
+        } finally {
+          loginBtn.disabled = false;
+          loginBtn.textContent = "Sign in";
+        }
+      });
+
+      document.getElementById("tabs").addEventListener("click", async event => {
+        const button = event.target.closest("button[data-filter]");
+        if (!button) return;
+
+        currentFilter = button.dataset.filter;
+
+        document.querySelectorAll("#tabs button").forEach(tab => {
+          tab.classList.toggle("active", tab === button);
+        });
+
+        await loadSubmissions();
+      });
+
+      gossipList.addEventListener("click", async event => {
+        const button = event.target.closest("button[data-action]");
+        if (!button || busy) return;
+
+        const id = button.dataset.id;
+        const newStatus = button.dataset.action;
+
+        if (!id || !["pending", "approved", "rejected"].includes(newStatus)) return;
+
+        if (newStatus === "approved" &&
+            !confirm("Approve and publish this gossip?")) return;
+
+        if (newStatus === "rejected" &&
+            !confirm("Reject this submission?")) return;
+
+        if (newStatus === "pending" &&
+            !confirm("Return this submission to pending review?")) return;
+
+        busy = true;
+        button.disabled = true;
+        hideNotice(dashboardNotice);
+
+        try {
+          const { error } = await db
+            .from("gg_submissions")
+            .update({ status: newStatus })
+            .eq("id", id);
+
+          if (error) throw error;
+
+          showNotice(
+            dashboardNotice,
+            newStatus === "approved"
+              ? "Approved. The gossip can now appear on the public page."
+              : newStatus === "rejected"
+                ? "Submission rejected."
+                : "Submission returned to pending review."
+          );
+
+          busy = false;
+          await loadSubmissions();
+        } catch (error) {
+          busy = false;
+          showNotice(
+            dashboardNotice,
+            "Could not update submission: " + (error.message || "Unknown error"),
+            true
+          );
+          await loadSubmissions();
+        }
+      });
+
+      document.getElementById("refreshBtn").addEventListener("click", loadSubmissions);
+
+      logoutBtn.addEventListener("click", async () => {
+        await db.auth.signOut();
+        showLogin();
+        loginForm.reset();
+        gossipList.innerHTML = "";
+        count.textContent = "";
+        hideNotice(dashboardNotice);
+        showNotice(loginNotice, "You have signed out.");
+      });
+
+      db.auth.onAuthStateChange((event, session) => {
+        if (event === "SIGNED_OUT" || !session) {
+          showLogin();
+        }
+      });
+
+      (async () => {
+        try {
+          const authorized = await checkAdmin();
+          if (authorized) await loadSubmissions();
+        } catch (error) {
+          showLogin();
+          showNotice(loginNotice, error.message || "Could not initialize admin panel.", true);
+        }
+      })();
+    })();
+  </script>
+</body>
+</html>

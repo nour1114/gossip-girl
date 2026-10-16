@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Nour Elsayed">
+  <meta name="description" content="Send Gossip Girl an anonymous secret, confession, or rumor for review.">
+  <meta name="theme-color" content="#090909">
+  <title>Gossip Girl | Contact</title>
+
+  <link rel="icon" type="image/jpeg" href="images/girl.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="config.js"></script>
+
+  <style>
+    :root {
+      --black:#090909; --panel:#121212; --gold:#d8bb78;
+      --light-gold:#f0dfae; --white:#f8f5ef; --muted:#aaa39a;
+      --border:rgba(216,187,120,.25); --error:#ffb3a9;
+      --success:#f0dfae;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    html { scroll-behavior:smooth; }
+    body {
+      min-height:100vh; background:var(--black); color:var(--white);
+      font-family:"Montserrat",sans-serif; overflow-x:hidden;
+    }
+    a { color:inherit; text-decoration:none; }
+    button,input,select,textarea { font:inherit; }
+    button:focus-visible,a:focus-visible,input:focus-visible,
+    select:focus-visible,textarea:focus-visible {
+      outline:2px solid var(--light-gold); outline-offset:4px;
+    }
+    .city-background {
+      position:fixed; inset:0; z-index:-1;
+      background:
+        radial-gradient(ellipse at 15% 80%,rgba(150,106,36,.15),transparent 40%),
+        radial-gradient(ellipse at 80% 20%,rgba(110,85,46,.12),transparent 38%),
+        linear-gradient(180deg,#080808,#15120d 70%,#080808);
+    }
+    .city-background::before {
+      content:""; position:absolute; inset:0; opacity:.55;
+      background:
+        radial-gradient(circle at 12% 18%,#d8bb78 0 1px,transparent 2px),
+        radial-gradient(circle at 77% 31%,#f0dfae 0 1px,transparent 2px),
+        radial-gradient(circle at 43% 12%,#d8bb78 0 1px,transparent 2px),
+        radial-gradient(circle at 89% 68%,#d8bb78 0 1px,transparent 2px),
+        radial-gradient(circle at 22% 55%,#f0dfae 0 1px,transparent 2px);
+      background-size:190px 180px,240px 210px,280px 260px,230px 220px,300px 270px;
+    }
+    .city-background::after {
+      content:""; position:absolute; bottom:0; left:0; right:0;
+      height:25vh; opacity:.2;
+      background:repeating-linear-gradient(90deg,transparent 0 24px,rgba(216,187,120,.22) 25px 27px,transparent 28px 52px);
+      clip-path:polygon(0 35%,4% 35%,4% 10%,8% 10%,8% 42%,12% 42%,12% 20%,17% 20%,17% 48%,22% 48%,22% 4%,27% 4%,27% 38%,32% 38%,32% 22%,37% 22%,37% 50%,42% 50%,42% 15%,48% 15%,48% 40%,53% 40%,53% 5%,58% 5%,58% 35%,63% 35%,63% 19%,69% 19%,69% 45%,75% 45%,75% 9%,80% 9%,80% 39%,86% 39%,86% 20%,91% 20%,91% 45%,96% 45%,96% 12%,100% 12%,100% 100%,0 100%);
+    }
+    .page-layout {
+      width:min(1500px,100%); min-height:100vh; margin:auto; padding:32px 38px;
+      display:grid; grid-template-columns:190px minmax(0,1fr) 125px; gap:30px;
+    }
+    .sidebar { display:flex; flex-direction:column; align-items:flex-start; gap:34px; padding:10px 0; }
+    .brand { color:var(--gold); font:600 1.3rem/1.5 "Cinzel",serif; letter-spacing:2px; }
+    .brand small { display:block; color:var(--muted); font:9px "Montserrat",sans-serif; letter-spacing:3px; }
+    nav { display:flex; flex-direction:column; gap:23px; width:100%; }
+    nav a { color:#c9c2b8; font-size:.72rem; letter-spacing:1.4px; text-transform:uppercase; transition:color .2s; }
+    nav a:hover,nav a.active { color:var(--light-gold); }
+    nav a.active::before { content:"✦"; margin-right:8px; color:var(--gold); }
+    .sidebar-note { margin-top:auto; max-width:175px; color:var(--muted); font:.75rem/1.9 "Cinzel",serif; }
+    .sidebar-note span { color:var(--gold); }
+    .main-content { min-width:0; padding:25px 0; }
+    .eyebrow { margin-bottom:20px; color:var(--gold); font-size:.67rem; letter-spacing:3.5px; text-transform:uppercase; }
+    .hero-title { margin-bottom:22px; font:500 clamp(2.5rem,4.4vw,4.5rem)/1.15 "Cinzel",serif; letter-spacing:-1px; }
+    .hero-title span { display:block; color:var(--gold); }
+    .hero-description { max-width:600px; color:#c2bbb1; font-size:.86rem; line-height:1.95; }
+    .hero-divider { width:100%; height:1px; margin:26px 0; background:linear-gradient(90deg,var(--gold),transparent); opacity:.5; }
+    .contact-layout { display:grid; grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr); gap:20px; align-items:stretch; }
+    .message-card,.form-card { min-width:0; padding:clamp(22px,3vw,34px); border:1px solid var(--border); background:rgba(18,18,18,.82); backdrop-filter:blur(8px); transition:border-color .3s,transform .3s; }
+    .message-card:hover,.form-card:hover { border-color:rgba(216,187,120,.5); }
+    .message-card { display:flex; flex-direction:column; justify-content:space-between; }
+    .card-label { margin-bottom:22px; color:var(--gold); font-size:.63rem; letter-spacing:2.5px; }
+    .message-card h2 { margin-bottom:18px; color:var(--light-gold); font:500 clamp(1.3rem,2vw,1.8rem)/1.5 "Cinzel",serif; }
+    .message-card p { color:#c2bbb1; font-size:.79rem; line-height:1.95; }
+    .message-card p+p { margin-top:18px; }
+    .signature { margin-top:38px; color:var(--gold); font:500 1.15rem "Cinzel",serif; letter-spacing:1px; }
+    .signature small { display:block; margin-top:10px; color:var(--muted); font:italic .75rem "Montserrat",sans-serif; letter-spacing:0; }
+    .form-title { margin-bottom:10px; color:var(--light-gold); font:500 1.3rem "Cinzel",serif; }
+    .form-description { margin-bottom:27px; color:var(--muted); font-size:.78rem; line-height:1.9; }
+    .form-group { margin-bottom:22px; }
+    label { display:block; margin-bottom:10px; color:var(--gold); font-size:.64rem; letter-spacing:1.5px; }
+    input,select,textarea {
+      display:block; width:100%; border:1px solid var(--border); border-radius:0;
+      outline:none; background:#0c0c0c; color:var(--white); padding:14px 15px;
+      font-family:"Montserrat",sans-serif; font-size:.8rem;
+      transition:border-color .25s,box-shadow .25s;
+    }
+    input::placeholder,textarea::placeholder { color:#77716a; }
+    input:focus,select:focus,textarea:focus { border-color:var(--gold); box-shadow:0 0 0 2px rgba(216,187,120,.08); }
+    select,button { cursor:pointer; }
+    select option { background:#0c0c0c; color:var(--white); }
+    textarea { min-height:155px; resize:vertical; line-height:1.8; }
+    .character-count { display:flex; justify-content:flex-end; margin-top:8px; color:var(--muted); font-size:.66rem; }
+    .privacy-note { margin-top:12px; color:#8d867c; font-size:.67rem; line-height:1.8; }
+    .submit-btn {
+      width:100%; min-height:48px; padding:14px 18px; border:1px solid var(--gold);
+      background:var(--gold); color:#090909; font-family:"Cinzel",serif;
+      font-size:.68rem; font-weight:700; letter-spacing:1.7px; transition:background .25s,color .25s,opacity .25s;
+    }
+    .submit-btn:hover:not(:disabled) { background:transparent; color:var(--light-gold); }
+    .submit-btn:disabled { opacity:.65; cursor:wait; }
+    #gossip-status { display:none; margin-top:20px; padding:14px; border:1px solid var(--border); font-size:.76rem; line-height:1.8; overflow-wrap:anywhere; }
+    #gossip-status.success { display:block; color:var(--success); border-color:rgba(216,187,120,.45); }
+    #gossip-status.error { display:block; color:var(--error); border-color:rgba(255,120,100,.5); }
+    .website-field { position:absolute!important; left:-10000px!important; top:auto!important; width:1px!important; height:1px!important; overflow:hidden!important; }
+    .captcha-wrap { margin:0 0 22px; overflow:hidden; }
+    .cast-rail { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:22px; }
+    .rail-title { color:var(--gold); font:.7rem "Cinzel",serif; letter-spacing:2px; text-align:center; }
+    .cast-link { display:flex; flex-direction:column; align-items:center; gap:8px; text-align:center; transition:transform .2s; }
+    .cast-link:hover { transform:translateY(-3px); }
+    .cast-circle { display:grid; place-items:center; width:82px; height:82px; overflow:hidden; border:1px solid var(--gold); border-radius:50%; background:#211b11; color:var(--gold); font:1.4rem "Cinzel",serif; transition:background .25s,box-shadow .25s; }
+    .cast-link:hover .cast-circle { background:#302719; box-shadow:0 0 22px rgba(216,187,120,.12); }
+    .cast-name { max-width:120px; color:#ded5c8; font-size:.62rem; letter-spacing:.6px; line-height:1.5; text-transform:uppercase; }
+    .rail-note { color:var(--muted); font:.68rem/1.9 "Cinzel",serif; text-align:center; }
+    .rail-note span { color:var(--gold); }
+    footer { grid-column:1/-1; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; padding-top:20px; border-top:1px solid var(--border); color:var(--muted); font-size:.68rem; letter-spacing:.8px; }
+    footer strong { color:var(--gold); font-weight:500; }
+    .fixed-gossip { position:fixed; right:20px; bottom:20px; z-index:5; padding:11px 16px; border:1px solid var(--gold); background:rgba(9,9,9,.9); color:var(--gold); font:600 .8rem "Cinzel",serif; letter-spacing:1px; transition:.2s; }
+    .fixed-gossip:hover { background:var(--gold); color:var(--black); }
+    @media(max-width:1100px) {
+      .page-layout { grid-template-columns:155px minmax(0,1fr); gap:24px; padding:26px; }
+      .cast-rail { grid-column:1/-1; flex-direction:row; flex-wrap:wrap; justify-content:flex-start; padding:20px 0; border-top:1px solid var(--border); }
+      .rail-title { width:100%; } .rail-note { text-align:left; }
+    }
+    @media(max-width:760px) {
+      .contact-layout { grid-template-columns:1fr; } .message-card { min-height:auto; } .signature { margin-top:28px; }
+    }
+    @media(max-width:620px) {
+      .page-layout { display:flex; flex-direction:column; gap:28px; padding:22px 18px; }
+      .sidebar { gap:18px; } nav { flex-direction:row; flex-wrap:wrap; gap:14px 17px; }
+      nav a { font-size:.63rem; } nav a.active::before,.sidebar-note { display:none; }
+      .main-content { padding:15px 0; } .hero-title { font-size:clamp(2.3rem,10vw,3.8rem); }
+      .message-card,.form-card { padding:22px; } .cast-circle { width:64px; height:64px; }
+      .cast-link { max-width:82px; } .cast-name { font-size:.56rem; } footer { flex-direction:column; }
+      .fixed-gossip { right:12px; bottom:12px; font-size:.7rem; }
+    }
+    @media(prefers-reduced-motion:reduce) {
+      *,*::before,*::after { scroll-behavior:auto!important; animation:none!important; transition:none!important; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="city-background" aria-hidden="true"></div>
+
+  <div class="page-layout">
+    <aside class="sidebar">
+      <a href="index.html" class="brand">GOSSIP GIRL<small>UPPER EAST SIDE</small></a>
+      <nav aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="characters.html">Characters</a>
+        <a href="gossip.html">Gossip</a>
+        <a href="gallery.html">Gallery</a>
+        <a class="active" href="contact.html" aria-current="page">Contact</a>
+      </nav>
+      <p class="sidebar-note">Every secret starts somewhere.<br><span>XOXO, Gossip Girl.</span></p>
+    </aside>
+
+    <main class="main-content">
+      <p class="eyebrow">Anonymously Yours</p>
+      <h1 class="hero-title">SPILL THE TEA<span>WE'RE LISTENING.</span></h1>
+      <p class="hero-description">
+        Got a secret? Heard a rumor? Have something to confess?
+        Your story starts here. Send it in, and let Gossip Girl decide
+        whether the Upper East Side needs to know.
+      </p>
+      <div class="hero-divider"></div>
+
+      <section class="contact-layout" aria-label="Send Gossip Girl a message">
+        <aside class="message-card">
+          <div>
+            <p class="card-label">A LITTLE BIRD TOLD ME...</p>
+            <h2>Every secret has a story.</h2>
+            <p>The Upper East Side never sleeps, and neither does the gossip. Share a confession, send a rumor, or ask the question everyone's afraid to ask.</p>
+            <p>Your message will be stored privately for review. Only approved messages can appear on the Gossip page.</p>
+          </div>
+          <div class="signature">XOXO, Gossip Girl<small>You know you love me.</small></div>
+        </aside>
+
+        <section class="form-card">
+          <h2 class="form-title">SEND YOUR MESSAGE</h2>
+          <p class="form-description">Choose your tea, write your message, and let the secrets unfold.</p>
+
+          <form id="gossip-form">
+            <div class="website-field" aria-hidden="true">
+              <label for="website">Leave this field empty</label>
+              <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+            </div>
+
+            <div class="form-group">
+              <label for="sender-name">YOUR NAME (OPTIONAL)</label>
+              <input type="text" id="sender-name" name="sender_name" placeholder="Anonymous Upper East Sider" maxlength="40" autocomplete="name">
+            </div>
+
+            <div class="form-group">
+              <label for="sender-email">YOUR EMAIL (OPTIONAL)</label>
+              <input type="email" id="sender-email" name="sender_email" placeholder="you@example.com" maxlength="254" autocomplete="email">
+            </div>
+
+            <div class="form-group">
+              <label for="gossip-category">WHAT'S THE TEA?</label>
+              <select id="gossip-category" name="category" required>
+                <option value="" disabled selected>Choose your story...</option>
+                <option value="Gossip">Spill the Gossip</option>
+                <option value="Secret">Confess a Secret</option>
+                <option value="Question">Ask Gossip Girl</option>
+                <option value="Other">Something Else</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="gossip-message">YOUR MESSAGE</label>
+              <textarea id="gossip-message" name="message" placeholder="I heard something you should know..." minlength="10" maxlength="1000" required aria-describedby="message-count privacy-note"></textarea>
+              <div class="character-count" id="message-count"><span id="character-number">0</span>/1000 characters</div>
+              <p class="privacy-note" id="privacy-note">
+                Don't include passwords, financial details, or sensitive personal information. Messages are reviewed before publication.
+              </p>
+            </div>
+
+            <div class="captcha-wrap">
+              <div class="cf-turnstile" data-sitekey="0x4AAAAAAFYHMpdWHeT4J9Rg" data-theme="dark" data-action="submit_secret"></div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="gossip-submit">💋 SPILL THE TEA</button>
+            <p id="gossip-status" role="status" aria-live="polite"></p>
+          </form>
+        </section>
+      </section>
+    </main>
+
+    <aside class="cast-rail">
+      <p class="rail-title">THE ELITE</p>
+      <a class="cast-link" href="characters.html"><div class="cast-circle" aria-hidden="true">B</div><span class="cast-name">Blair Waldorf</span></a>
+      <a class="cast-link" href="characters.html"><div class="cast-circle" aria-hidden="true">S</div><span class="cast-name">Serena van der Woodsen</span></a>
+      <a class="cast-link" href="characters.html"><div class="cast-circle" aria-hidden="true">C</div><span class="cast-name">Chuck Bass</span></a>
+      <p class="rail-note">Your secret<br>starts here.<br><span>XOXO</span></p>
+    </aside>
+
+    <footer>
+      <p>MANHATTAN IS NEVER SHORT OF SECRETS.</p>
+      <p><strong>XOXO, GOSSIP GIRL</strong> · FAN-MADE WEBSITE</p>
+    </footer>
+  </div>
+
+  <a href="gossip.html" class="fixed-gossip">💋 XOXO</a>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const form = document.getElementById("gossip-form");
+      const submitButton = document.getElementById("gossip-submit");
+      const statusMessage = document.getElementById("gossip-status");
+      const messageInput = document.getElementById("gossip-message");
+      const characterNumber = document.getElementById("character-number");
+      const honeypot = document.getElementById("website");
+
+      const config = window.GG_CONFIG;
+      const ENDPOINT = "https://sxirqvrdvchrrikfumpc.supabase.co/functions/v1/submit-secret";
+      const MIN_TIME_BEFORE_SUBMIT = 3000;
+      const SUBMISSION_COOLDOWN = 30000;
+      const formOpenedAt = Date.now();
+
+      let isSubmitting = false;
+      let lastSuccessfulSubmitAt = 0;
+
+      function showStatus(message, type) {
+        statusMessage.textContent = message;
+        statusMessage.className = type;
+      }
+
+      function setSubmitting(value) {
+        isSubmitting = value;
+        submitButton.disabled = value;
+        submitButton.textContent = value ? "SENDING YOUR TEA..." : "💋 SPILL THE TEA";
+      }
+
+      function updateCharacterCount() {
+        characterNumber.textContent = messageInput.value.length;
+      }
+
+      messageInput.addEventListener("input", updateCharacterCount);
+      updateCharacterCount();
+
+      if (!config || !config.supabaseAnonKey) {
+        showStatus("The submission system isn't configured. Please try again later.", "error");
+        submitButton.disabled = true;
+        console.error("Missing public Supabase key in config.js.");
+        return;
+      }
+
+      const emailSettings = config.emailjs || {};
+      const emailPublicKey = emailSettings.publicKey;
+      const emailServiceId = emailSettings.serviceId;
+      const emailTemplateId = emailSettings.templateId;
+
+      if (window.emailjs && emailPublicKey) {
+        emailjs.init({ publicKey: emailPublicKey });
+      }
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        if (isSubmitting || !form.reportValidity()) return;
+
+        const name = document.getElementById("sender-name").value.trim();
+        const email = document.getElementById("sender-email").value.trim();
+        const category = document.getElementById("gossip-category").value;
+        const message = messageInput.value.trim();
+
+        if (honeypot.value.trim()) {
+          showStatus("Your message could not be submitted. Please try again.", "error");
+          return;
+        }
+
+        if (Date.now() - formOpenedAt < MIN_TIME_BEFORE_SUBMIT) {
+          showStatus("Please take a moment to review your message before submitting.", "error");
+          return;
+        }
+
+        if (!category) {
+          showStatus("Please choose a message category.", "error");
+          return;
+        }
+
+        if (name.length > 40 || message.length < 10 || message.length > 1000) {
+          showStatus("Your name must be at most 40 characters, and your message must be 10–1000 characters.", "error");
+          return;
+        }
+
+        const remaining = SUBMISSION_COOLDOWN - (Date.now() - lastSuccessfulSubmitAt);
+        if (remaining > 0) {
+          showStatus(`Please wait ${Math.ceil(remaining / 1000)} seconds before sending another message.`, "error");
+          return;
+        }
+
+        const captchaInput = form.querySelector('[name="cf-turnstile-response"]');
+        const captchaToken = captchaInput?.value?.trim();
+
+        if (!captchaToken) {
+          showStatus("Please complete the CAPTCHA before submitting.", "error");
+          return;
+        }
+
+        setSubmitting(true);
+        statusMessage.className = "";
+        statusMessage.textContent = "";
+
+        try {
+          const response = await fetch(ENDPOINT, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "apikey": config.supabaseAnonKey
+            },
+            body: JSON.stringify({
+              nickname: name,
+              message,
+              category,
+              captchaToken,
+              website: honeypot.value
+            })
+          });
+
+          let result = {};
+          try {
+            result = await response.json();
+          } catch {
+            throw new Error("The server returned an unreadable response.");
+          }
+
+          if (!response.ok || result.success !== true) {
+            if (response.status === 429) {
+              throw new Error("Too many submissions. Please wait before trying again.");
+            }
+            throw new Error(result.error || "Couldn't submit your message. Please try again.");
+          }
+
+          lastSuccessfulSubmitAt = Date.now();
+
+          // Email is supplementary. It is not part of the secure submission path.
+          if (window.emailjs && emailPublicKey && emailServiceId && emailTemplateId) {
+            try {
+              await emailjs.send(emailServiceId, emailTemplateId, {
+                name: name || "Anonymous",
+                email: email || "Not provided",
+                category,
+                message
+              });
+            } catch (emailError) {
+              console.warn("Message saved, but email notification failed.", emailError);
+            }
+          }
+
+          form.reset();
+          if (window.turnstile) window.turnstile.reset();
+          updateCharacterCount();
+
+          showStatus("Your secret has been received! It will remain private until reviewed. XOXO 💋", "success");
+        } catch (error) {
+          console.error("Secure submission failed:", error);
+          showStatus(error.message || "Couldn't save your message. Please try again later.", "error");
+        } finally {
+          setSubmitting(false);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

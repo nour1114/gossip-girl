@@ -1,0 +1,841 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="author" content="Nour Elsayed">
+    <meta name="description"
+          content="Enter the Upper East Side. Explore Gossip Girl characters, secrets, episodes and scandals.">
+
+    <title>Gossip Girl | XOXO</title>
+
+    <link rel="icon" type="image/jpeg" href="images/girl.jpg">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <style>
+        :root {
+            --black: #090909;
+            --panel: #121212;
+            --gold: #d8bb78;
+            --light-gold: #f0dfae;
+            --white: #f8f5ef;
+            --muted: #aaa39a;
+            --border: rgba(216, 187, 120, .25);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--black);
+            color: var(--white);
+            font-family: "Montserrat", sans-serif;
+            overflow-x: hidden;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            font: inherit;
+        }
+
+        .city-background {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background:
+                radial-gradient(ellipse at 15% 80%, rgba(150,106,36,.15), transparent 40%),
+                radial-gradient(ellipse at 80% 20%, rgba(110,85,46,.12), transparent 38%),
+                linear-gradient(180deg, #080808, #15120d 70%, #080808);
+        }
+
+        .city-background::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            opacity: .55;
+            background:
+                radial-gradient(circle at 12% 18%, #d8bb78 0 1px, transparent 2px),
+                radial-gradient(circle at 77% 31%, #f0dfae 0 1px, transparent 2px),
+                radial-gradient(circle at 43% 12%, #d8bb78 0 1px, transparent 2px),
+                radial-gradient(circle at 89% 68%, #d8bb78 0 1px, transparent 2px),
+                radial-gradient(circle at 22% 55%, #f0dfae 0 1px, transparent 2px);
+            background-size: 190px 180px, 240px 210px, 280px 260px,
+                             230px 220px, 300px 270px;
+        }
+
+        .city-background::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 25vh;
+            opacity: .2;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent 0 24px,
+                rgba(216,187,120,.22) 25px 27px,
+                transparent 28px 52px
+            );
+            clip-path: polygon(
+                0 35%,4% 35%,4% 10%,8% 10%,8% 42%,
+                12% 42%,12% 20%,17% 20%,17% 48%,
+                22% 48%,22% 4%,27% 4%,27% 38%,
+                32% 38%,32% 22%,37% 22%,37% 50%,
+                42% 50%,42% 15%,48% 15%,48% 40%,
+                53% 40%,53% 5%,58% 5%,58% 35%,
+                63% 35%,63% 19%,69% 19%,69% 45%,
+                75% 45%,75% 9%,80% 9%,80% 39%,
+                86% 39%,86% 20%,91% 20%,91% 45%,
+                96% 45%,96% 12%,100% 12%,100% 100%,0 100%
+            );
+        }
+
+        .page-layout {
+            width: min(1500px, 100%);
+            min-height: 100vh;
+            margin: auto;
+            padding: 32px 38px;
+            display: grid;
+            grid-template-columns: 190px minmax(0, 1fr) 125px;
+            gap: 30px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 34px;
+            padding: 10px 0;
+        }
+
+        .brand {
+            color: var(--gold);
+            font: 600 1.3rem/1.5 "Cinzel", serif;
+            letter-spacing: 2px;
+        }
+
+        .brand small {
+            display: block;
+            color: var(--muted);
+            font: 9px "Montserrat", sans-serif;
+            letter-spacing: 3px;
+        }
+
+        nav {
+            display: flex;
+            flex-direction: column;
+            gap: 23px;
+            width: 100%;
+        }
+
+        nav a {
+            color: #c9c2b8;
+            font-size: .72rem;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+            transition: color .2s;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: var(--light-gold);
+        }
+
+        nav a.active::before {
+            content: "✦";
+            margin-right: 8px;
+            color: var(--gold);
+        }
+
+        .sidebar-note {
+            margin-top: auto;
+            max-width: 175px;
+            color: var(--muted);
+            font: .75rem/1.9 "Cinzel", serif;
+        }
+
+        .sidebar-note span {
+            color: var(--gold);
+        }
+
+        /* Hero */
+        .main-content {
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 25px 0;
+        }
+
+        .eyebrow {
+            margin-bottom: 20px;
+            color: var(--gold);
+            font-size: .67rem;
+            letter-spacing: 3.5px;
+            text-transform: uppercase;
+        }
+
+        .hero-title {
+            margin-bottom: 22px;
+            font: 500 clamp(2.7rem, 5vw, 5.4rem)/1.12 "Cinzel", serif;
+            letter-spacing: -1px;
+        }
+
+        .hero-title span {
+            display: block;
+            color: var(--gold);
+        }
+
+        .hero-description {
+            max-width: 540px;
+            color: #c2bbb1;
+            font-size: .9rem;
+            line-height: 1.95;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 27px;
+        }
+
+        .action {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 45px;
+            padding: 0 19px;
+            border: 1px solid var(--gold);
+            font-size: .68rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: .2s;
+        }
+
+        .action.primary {
+            background: var(--gold);
+            color: #111;
+        }
+
+        .action.secondary {
+            color: var(--light-gold);
+        }
+
+        .action:hover {
+            transform: translateY(-2px);
+            background: var(--light-gold);
+            color: #111;
+        }
+
+        .hero-divider {
+            width: 100%;
+            max-width: 490px;
+            height: 1px;
+            margin: 30px 0 20px;
+            background: linear-gradient(90deg, var(--gold), transparent);
+            opacity: .5;
+        }
+
+        .quote {
+            color: #e4d6b7;
+            font: .9rem/1.8 "Cinzel", serif;
+        }
+
+        .quote small {
+            display: block;
+            margin-top: 5px;
+            color: var(--muted);
+            font: .62rem "Montserrat", sans-serif;
+            letter-spacing: 2px;
+        }
+
+        /* Right-side character circles */
+        .cast-rail {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 22px;
+        }
+
+        .rail-title {
+            color: var(--gold);
+            font: .7rem "Cinzel", serif;
+            letter-spacing: 2px;
+        }
+
+        .cast-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            text-align: center;
+            transition: transform .2s;
+        }
+
+        .cast-link:hover {
+            transform: scale(1.05);
+        }
+
+        .cast-circle {
+            display: grid;
+            place-items: center;
+            width: 82px;
+            height: 82px;
+            overflow: hidden;
+            border: 1px solid var(--gold);
+            border-radius: 50%;
+            background: #211b11;
+            color: var(--gold);
+            font: 1.4rem "Cinzel", serif;
+        }
+
+        .cast-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cast-name {
+            max-width: 120px;
+            color: #ded5c8;
+            font-size: .62rem;
+            letter-spacing: .6px;
+            line-height: 1.5;
+            text-transform: uppercase;
+        }
+
+        /* API cast cards */
+        .cast-section {
+            grid-column: 1 / -1;
+            padding: 30px 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .section-title {
+            margin-bottom: 8px;
+            color: var(--gold);
+            font: 500 1.35rem "Cinzel", serif;
+            letter-spacing: 2px;
+        }
+
+        .section-description {
+            margin-bottom: 22px;
+            color: var(--muted);
+            font-size: .78rem;
+            line-height: 1.8;
+        }
+
+        .cast-grid {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .character-card {
+            overflow: hidden;
+            border: 1px solid var(--border);
+            background: rgba(15,15,15,.9);
+            transition: transform .2s, border-color .2s;
+        }
+
+        .character-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--gold);
+        }
+
+        .character-card img,
+        .placeholder {
+            display: grid;
+            place-items: center;
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            object-fit: cover;
+            background: #211b11;
+            color: var(--gold);
+            font: 2rem "Cinzel", serif;
+        }
+
+        .character-info {
+            padding: 12px;
+        }
+
+        .character-info h3 {
+            margin-bottom: 6px;
+            color: var(--light-gold);
+            font: 500 .78rem/1.5 "Cinzel", serif;
+        }
+
+        .character-info p {
+            color: var(--muted);
+            font-size: .67rem;
+            line-height: 1.7;
+        }
+
+        .character-info a {
+            display: inline-block;
+            margin-top: 12px;
+            color: var(--gold);
+            font-size: .64rem;
+            letter-spacing: .8px;
+            text-transform: uppercase;
+        }
+
+        .character-info a:hover {
+            text-decoration: underline;
+        }
+
+        .status {
+            color: var(--muted);
+            font-size: .75rem;
+            line-height: 1.8;
+        }
+
+        /* Keep your existing video */
+        .video-section {
+            grid-column: 1 / -1;
+            padding: 25px 0;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .video-section h2 {
+            margin-bottom: 18px;
+            color: var(--gold);
+            font: 500 1.3rem "Cinzel", serif;
+            letter-spacing: 2px;
+        }
+
+        .video {
+            display: block;
+            width: min(720px, 100%);
+            max-height: 430px;
+            margin: auto;
+            border: 1px solid var(--border);
+            background: #000;
+        }
+
+        .fixed-gossip {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 5;
+            padding: 11px 16px;
+            border: 1px solid var(--gold);
+            background: rgba(9,9,9,.9);
+            color: var(--gold);
+            font: 600 .8rem "Cinzel", serif;
+            letter-spacing: 1px;
+        }
+
+        footer {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            font-size: .68rem;
+            letter-spacing: .8px;
+        }
+
+        footer strong {
+            color: var(--gold);
+            font-weight: 500;
+        }
+
+        @media (max-width: 1000px) {
+            .page-layout {
+                grid-template-columns: 155px minmax(0, 1fr);
+                gap: 24px;
+                padding: 26px;
+            }
+
+            .cast-rail {
+                grid-column: 1 / -1;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: flex-start;
+                padding: 20px 0;
+                border-top: 1px solid var(--border);
+            }
+
+            .rail-title {
+                width: 100%;
+            }
+
+            .cast-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 620px) {
+            .page-layout {
+                display: flex;
+                flex-direction: column;
+                gap: 28px;
+                padding: 22px 18px;
+            }
+
+            .sidebar {
+                gap: 18px;
+            }
+
+            nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 14px 17px;
+            }
+
+            nav a {
+                font-size: .63rem;
+            }
+
+            nav a.active::before {
+                display: none;
+            }
+
+            .sidebar-note {
+                display: none;
+            }
+
+            .main-content {
+                padding: 15px 0;
+            }
+
+            .hero-title {
+                font-size: clamp(2.4rem, 11vw, 4rem);
+            }
+
+            .hero-description {
+                font-size: .83rem;
+            }
+
+            .cast-circle {
+                width: 64px;
+                height: 64px;
+            }
+
+            .cast-link {
+                max-width: 82px;
+            }
+
+            .cast-name {
+                font-size: .56rem;
+            }
+
+            .cast-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 12px;
+            }
+
+            footer {
+                flex-direction: column;
+            }
+
+            .fixed-gossip {
+                right: 12px;
+                bottom: 12px;
+                font-size: .7rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="city-background" aria-hidden="true"></div>
+
+    <div class="page-layout">
+
+        <aside class="sidebar">
+            <a href="index.html" class="brand">
+                GOSSIP GIRL
+                <small>UPPER EAST SIDE</small>
+            </a>
+
+            <nav aria-label="Main navigation">
+                <a class="active" href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="characters.html">Characters</a>
+                <a href="gossip.html">Gossip</a>
+                <a href="gallery.html">Gallery</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+
+            <p class="sidebar-note">
+                You know you love me.
+                <br>
+                <span>XOXO, Gossip Girl.</span>
+            </p>
+        </aside>
+
+        <main class="main-content">
+            <p class="eyebrow">Spotted on the Upper East Side</p>
+
+            <h1 class="hero-title">
+                YOU KNOW
+                <span>YOU LOVE ME.</span>
+            </h1>
+
+            <p class="hero-description">
+                Welcome to Manhattan's most exclusive circle.
+                Secrets, scandals, unforgettable friendships, and
+                stories that never stay private for long.
+                Your favorite source for everything Gossip Girl.
+            </p>
+
+            <div class="hero-actions">
+                <a class="action primary" href="characters.html">
+                    Meet the Characters
+                </a>
+
+                <a class="action secondary" href="gossip.html">
+                    Read the Gossip
+                </a>
+            </div>
+
+            <div class="hero-divider"></div>
+
+            <p class="quote">
+                You know you love me.
+                <small>XOXO, GOSSIP GIRL</small>
+            </p>
+        </main>
+
+        <aside class="cast-rail">
+            <p class="rail-title">THE ELITE</p>
+
+            <a class="cast-link" href="characters.html">
+                <div class="cast-circle" id="rail-circle-1">B</div>
+                <span class="cast-name">Blair Waldorf</span>
+            </a>
+
+            <a class="cast-link" href="characters.html">
+                <div class="cast-circle" id="rail-circle-2">S</div>
+                <span class="cast-name">Serena van der Woodsen</span>
+            </a>
+
+            <a class="cast-link" href="characters.html">
+                <div class="cast-circle" id="rail-circle-3">C</div>
+                <span class="cast-name">Chuck Bass</span>
+            </a>
+
+            <p class="status" id="rail-status">Loading the latest secrets...</p>
+        </aside>
+
+        <section class="cast-section">
+            <h2 class="section-title">THE INNER CIRCLE</h2>
+            <p class="section-description">
+                Meet the original cast behind the secrets and scandals.
+            </p>
+
+            <div class="cast-grid" id="cast-grid">
+                <p class="status">Loading the Upper East Side...</p>
+            </div>
+        </section>
+
+        <section class="video-section">
+            <h2>WATCH GOSSIP GIRL</h2>
+
+            <video class="video" controls preload="metadata">
+                <source src="gossip girl.mp4" type="video/mp4">
+                Your browser does not support the video element.
+            </video>
+        </section>
+
+        <footer>
+            <p>MANHATTAN IS NEVER SHORT OF SECRETS.</p>
+            <p><strong>XOXO, GOSSIP GIRL</strong> · FAN-MADE WEBSITE</p>
+        </footer>
+
+    </div>
+
+    <div class="fixed-gossip">💋 XOXO</div>
+
+    <script>
+        const castGrid = document.getElementById("cast-grid");
+        const railStatus = document.getElementById("rail-status");
+
+        const mainCastNames = [
+            "Blake Lively",
+            "Leighton Meester",
+            "Penn Badgley",
+            "Chace Crawford",
+            "Ed Westwick"
+        ];
+
+        const characterNames = {
+            "Blake Lively": "Serena van der Woodsen",
+            "Leighton Meester": "Blair Waldorf",
+            "Penn Badgley": "Dan Humphrey",
+            "Chace Crawford": "Nate Archibald",
+            "Ed Westwick": "Chuck Bass"
+        };
+
+        function normalizeName(name) {
+            return name.toLowerCase().replace(/[^a-z]/g, "");
+        }
+
+        function makeCharacterCard(member) {
+            const card = document.createElement("article");
+            card.className = "character-card";
+
+            const personImage = member.person.image?.medium;
+            let image;
+
+            if (personImage) {
+                image = document.createElement("img");
+                image.src = personImage;
+                image.alt = characterNames[member.person.name] ||
+                    member.character;
+                image.loading = "lazy";
+            } else {
+                image = document.createElement("div");
+                image.className = "placeholder";
+                image.textContent = member.character.charAt(0);
+                image.setAttribute("aria-hidden", "true");
+            }
+
+            const info = document.createElement("div");
+            info.className = "character-info";
+
+            const heading = document.createElement("h3");
+            heading.textContent =
+                characterNames[member.person.name] || member.character;
+
+            const actor = document.createElement("p");
+            actor.textContent = "Played by " + member.person.name;
+
+            const link = document.createElement("a");
+            link.href = "characters.html";
+            link.textContent = "Explore character";
+
+            info.append(heading, actor, link);
+            card.append(image, info);
+
+            return card;
+        }
+
+        function updateRailCircle(circleId, member) {
+            if (!member?.person?.image?.medium) return;
+
+            const circle = document.getElementById(circleId);
+            const image = document.createElement("img");
+
+            image.src = member.person.image.medium;
+            image.alt = characterNames[member.person.name] ||
+                member.character;
+
+            circle.replaceChildren(image);
+        }
+
+        async function loadCast() {
+            try {
+                const searchResponse = await fetch(
+                    "https://api.tvmaze.com/search/shows?q=Gossip%20Girl"
+                );
+
+                if (!searchResponse.ok) {
+                    throw new Error("Show search failed");
+                }
+
+                const searchResults = await searchResponse.json();
+
+                const originalShow = searchResults.find(result =>
+                    result.show.name.toLowerCase() === "gossip girl" &&
+                    result.show.premiered?.startsWith("2007")
+                );
+
+                if (!originalShow) {
+                    throw new Error("Original Gossip Girl was not found");
+                }
+
+                const castResponse = await fetch(
+                    `https://api.tvmaze.com/shows/${originalShow.show.id}/cast`
+                );
+
+                if (!castResponse.ok) {
+                    throw new Error("Cast request failed");
+                }
+
+                const cast = await castResponse.json();
+
+                const mainCast = mainCastNames
+                    .map(name => cast.find(member =>
+                        normalizeName(member.person.name) ===
+                        normalizeName(name)
+                    ))
+                    .filter(Boolean);
+
+                const displayedCast = mainCast.length
+                    ? mainCast
+                    : cast.slice(0, 5);
+
+                castGrid.replaceChildren();
+
+                displayedCast.forEach(member => {
+                    castGrid.appendChild(makeCharacterCard(member));
+                });
+
+                const blair = cast.find(member =>
+                    normalizeName(member.person.name) === "leightonmeester"
+                );
+
+                const serena = cast.find(member =>
+                    normalizeName(member.person.name) === "blakelively"
+                );
+
+                const chuck = cast.find(member =>
+                    normalizeName(member.person.name) === "edwestwick"
+                );
+
+                updateRailCircle("rail-circle-1", blair);
+                updateRailCircle("rail-circle-2", serena);
+                updateRailCircle("rail-circle-3", chuck);
+
+                railStatus.textContent =
+                    "The secrets are never really secret.";
+
+            } catch (error) {
+                console.error("TVmaze API error:", error);
+
+                castGrid.replaceChildren();
+
+                const message = document.createElement("p");
+                message.className = "status";
+                message.textContent =
+                    "The cast couldn't load. Check your connection and refresh the page.";
+
+                castGrid.appendChild(message);
+                railStatus.textContent = "The gossip is temporarily offline.";
+            }
+        }
+
+        loadCast();
+    </script>
+</body>
+</html>

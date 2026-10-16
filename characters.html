@@ -1,0 +1,913 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Nour Elsayed">
+    <meta name="description" content="Meet the original Gossip Girl characters and discover the actors behind Manhattan's elite.">
+
+    <title>Characters | Gossip Girl</title>
+    <link rel="icon" type="image/jpeg" href="images/girl.jpg">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --black: #090909;
+            --panel: #121212;
+            --gold: #d8bb78;
+            --light-gold: #f0dfae;
+            --white: #f8f5ef;
+            --muted: #aaa39a;
+            --border: rgba(216, 187, 120, .25);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--black);
+            color: var(--white);
+            font-family: "Montserrat", sans-serif;
+            overflow-x: hidden;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .city-background {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background:
+                linear-gradient(rgba(5, 5, 5, .83), rgba(5, 5, 5, .94)),
+                url("https://images.unsplash.com/photo-1518391846015-55a9cc003b25?auto=format&fit=crop&w=2000&q=85")
+                center / cover no-repeat;
+        }
+
+        .city-background::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(
+                ellipse at center,
+                transparent 0%,
+                rgba(0, 0, 0, .4) 100%
+            );
+        }
+
+        .page-layout {
+            display: grid;
+            grid-template-columns: 190px minmax(0, 1fr) 125px;
+            gap: 30px;
+            width: min(1500px, 100%);
+            min-height: 100vh;
+            margin: auto;
+            padding: 32px 38px;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 8px 0;
+            border-right: 1px solid var(--border);
+        }
+
+        .brand {
+            color: var(--gold);
+            font: 600 1.3rem/1.4 "Cinzel", serif;
+            letter-spacing: 2px;
+        }
+
+        .brand small {
+            display: block;
+            margin-top: 5px;
+            color: var(--muted);
+            font: 9px "Montserrat", sans-serif;
+            letter-spacing: 3px;
+        }
+
+        .sidebar nav {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            width: 100%;
+            margin-top: 65px;
+        }
+
+        .sidebar nav a {
+            position: relative;
+            color: #c9c2b8;
+            font-size: .68rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            transition: color .2s;
+        }
+
+        .sidebar nav a:hover,
+        .sidebar nav a.active {
+            color: var(--gold);
+        }
+
+        .sidebar nav a.active::before {
+            content: "";
+            position: absolute;
+            left: -16px;
+            top: 50%;
+            width: 3px;
+            height: 18px;
+            background: var(--gold);
+            transform: translateY(-50%);
+        }
+
+        .sidebar-note {
+            margin-top: auto;
+            padding: 20px 15px 0 0;
+            color: var(--muted);
+            font-size: .66rem;
+            line-height: 1.9;
+        }
+
+        .sidebar-note strong {
+            color: var(--gold);
+            font-weight: 500;
+        }
+
+        .main-content {
+            min-width: 0;
+            padding: 12px 0 35px;
+        }
+
+        .eyebrow {
+            margin-bottom: 18px;
+            color: var(--gold);
+            font-size: .67rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .hero {
+            padding: 40px 0 32px;
+        }
+
+        .hero-title {
+            max-width: 800px;
+            margin-bottom: 22px;
+            font: 500 clamp(2.6rem, 5vw, 5rem)/1.13 "Cinzel", serif;
+            letter-spacing: -1px;
+        }
+
+        .hero-title span {
+            color: var(--gold);
+        }
+
+        .hero-description {
+            max-width: 650px;
+            color: #c6bfb5;
+            font-size: .84rem;
+            line-height: 2;
+        }
+
+        .hero-divider {
+            width: 75px;
+            height: 1px;
+            margin: 28px 0;
+            background: var(--gold);
+        }
+
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin: 12px 0 25px;
+        }
+
+        .toolbar p {
+            color: var(--muted);
+            font-size: .72rem;
+            line-height: 1.8;
+        }
+
+        .search-input {
+            width: min(100%, 300px);
+            padding: 13px 15px;
+            border: 1px solid var(--border);
+            border-radius: 0;
+            outline: none;
+            background: rgba(15, 15, 15, .92);
+            color: var(--white);
+            font: .76rem "Montserrat", sans-serif;
+            transition: border-color .2s;
+        }
+
+        .search-input::placeholder {
+            color: #898176;
+        }
+
+        .search-input:focus {
+            border-color: var(--gold);
+        }
+
+        .character-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .character-card {
+            min-width: 0;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            background: rgba(15, 15, 15, .91);
+            transition: transform .25s, border-color .25s;
+        }
+
+        .character-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold);
+        }
+
+        .character-image,
+        .image-placeholder {
+            display: block;
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            object-fit: cover;
+            background: #211b11;
+        }
+
+        .image-placeholder {
+            display: grid;
+            place-items: center;
+            background: linear-gradient(145deg, #332b1d, #101010);
+            color: var(--gold);
+            font: 3rem "Cinzel", serif;
+        }
+
+        .card-content {
+            padding: 15px;
+        }
+
+        .character-number {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--muted);
+            font-size: .57rem;
+            letter-spacing: 1.5px;
+        }
+
+        .character-name {
+            margin-bottom: 8px;
+            color: var(--light-gold);
+            font: 500 .96rem/1.5 "Cinzel", serif;
+        }
+
+        .actor-name {
+            margin-bottom: 12px;
+            color: var(--gold);
+            font-size: .68rem;
+            line-height: 1.6;
+        }
+
+        .character-description {
+            color: #b7b0a6;
+            font-size: .7rem;
+            line-height: 1.8;
+        }
+
+        .status {
+            grid-column: 1 / -1;
+            padding: 35px 10px;
+            color: var(--muted);
+            text-align: center;
+            font-size: .8rem;
+            line-height: 1.9;
+        }
+
+        .retry-button,
+        .action {
+            display: inline-block;
+            margin-top: 14px;
+            padding: 12px 17px;
+            border: 1px solid var(--gold);
+            background: transparent;
+            color: var(--gold);
+            font: .68rem "Montserrat", sans-serif;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background .2s, color .2s;
+        }
+
+        .retry-button:hover,
+        .action:hover {
+            background: var(--gold);
+            color: #111;
+        }
+
+        .back-home {
+            display: inline-block;
+            margin-top: 32px;
+            padding-bottom: 7px;
+            border-bottom: 1px solid var(--gold);
+            color: var(--gold);
+            font-size: .68rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .cast-rail {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 28px;
+            padding-top: 70px;
+        }
+
+        .cast-item {
+            width: 100%;
+            text-align: center;
+        }
+
+        .cast-circle {
+            display: grid;
+            place-items: center;
+            width: 76px;
+            height: 76px;
+            margin: 0 auto 10px;
+            overflow: hidden;
+            border: 1px solid var(--gold);
+            border-radius: 50%;
+            background: linear-gradient(145deg, #332b1d, #101010);
+            color: var(--gold);
+            font: 1.6rem "Cinzel", serif;
+        }
+
+        .cast-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cast-name {
+            color: #c9c2b8;
+            font-size: .59rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        footer {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 45px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            font-size: .61rem;
+            letter-spacing: .7px;
+            line-height: 1.8;
+        }
+
+        footer strong {
+            color: var(--gold);
+            font-weight: 500;
+        }
+
+        .xoxo {
+            position: fixed;
+            right: 24px;
+            bottom: 18px;
+            z-index: 5;
+            color: var(--gold);
+            font: 1rem "Cinzel", serif;
+            letter-spacing: 1px;
+            text-shadow: 0 0 15px rgba(216, 187, 120, .2);
+        }
+
+        @media (min-width: 1400px) {
+            .character-grid {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 1000px) {
+            .page-layout {
+                grid-template-columns: 155px minmax(0, 1fr);
+                gap: 25px;
+                padding: 25px;
+            }
+
+            .cast-rail {
+                grid-column: 2;
+                grid-row: 2;
+                flex-direction: row;
+                justify-content: center;
+                padding-top: 0;
+            }
+
+            .cast-item {
+                width: auto;
+            }
+
+            .cast-circle {
+                width: 62px;
+                height: 62px;
+            }
+
+            .character-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 700px) {
+            .page-layout {
+                display: flex;
+                flex-direction: column;
+                gap: 25px;
+                padding: 22px 18px 35px;
+            }
+
+            .sidebar {
+                padding: 0 0 20px;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .sidebar nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 15px 18px;
+                margin-top: 25px;
+            }
+
+            .sidebar nav a {
+                font-size: .61rem;
+            }
+
+            .sidebar nav a.active::before {
+                display: none;
+            }
+
+            .sidebar-note {
+                display: none;
+            }
+
+            .main-content {
+                padding-top: 0;
+            }
+
+            .hero {
+                padding: 25px 0;
+            }
+
+            .hero-title {
+                font-size: clamp(2.3rem, 10vw, 3.8rem);
+            }
+
+            .hero-description {
+                font-size: .78rem;
+            }
+
+            .toolbar {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .search-input {
+                width: 100%;
+            }
+
+            .character-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 12px;
+            }
+
+            .card-content {
+                padding: 11px;
+            }
+
+            .character-name {
+                font-size: .82rem;
+            }
+
+            .character-description {
+                font-size: .67rem;
+            }
+
+            .cast-rail {
+                order: 3;
+                gap: 20px;
+            }
+
+            .cast-circle {
+                width: 58px;
+                height: 58px;
+            }
+
+            footer {
+                flex-direction: column;
+            }
+
+            .xoxo {
+                right: 14px;
+                bottom: 10px;
+                font-size: .85rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .character-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="city-background" aria-hidden="true"></div>
+
+    <div class="page-layout">
+        <aside class="sidebar">
+            <a href="index.html" class="brand">
+                GOSSIP GIRL
+                <small>UPPER EAST SIDE</small>
+            </a>
+
+            <nav aria-label="Main navigation">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a class="active" href="characters.html">Characters</a>
+                <a href="gossip.html">Gossip</a>
+                <a href="gallery.html">Gallery</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+
+            <p class="sidebar-note">
+                Spotted on the Upper East Side.<br>
+                <strong>Everyone has a story.</strong><br>
+                Who will you discover next?
+            </p>
+        </aside>
+
+        <main class="main-content">
+            <section class="hero">
+                <p class="eyebrow">Every face has a secret</p>
+
+                <h1 class="hero-title">
+                    MEET THE <span>ELITE.</span>
+                </h1>
+
+                <p class="hero-description">
+                    From Queen B to Manhattan's golden girl, discover the
+                    characters, the actors, and the personalities who made
+                    the Upper East Side unforgettable. Every name has a story.
+                    Every story has a secret.
+                </p>
+
+                <div class="hero-divider"></div>
+            </section>
+
+            <section aria-label="Gossip Girl cast">
+                <div class="toolbar">
+                    <p id="cast-count">Discover the original cast.</p>
+
+                    <input
+                        id="search"
+                        class="search-input"
+                        type="search"
+                        placeholder="Search characters or actors..."
+                        aria-label="Search characters or actors">
+                </div>
+
+                <div id="character-grid" class="character-grid" aria-live="polite">
+                    <p class="status">Loading the Upper East Side...</p>
+                </div>
+            </section>
+
+            <a class="back-home" href="index.html">← Back to Home</a>
+
+            <footer>
+                <p>MANHATTAN IS NEVER SHORT OF SECRETS.</p>
+                <p><strong>XOXO, GOSSIP GIRL</strong> · FAN-MADE WEBSITE</p>
+            </footer>
+        </main>
+
+        <aside class="cast-rail" aria-label="Featured characters">
+            <div class="cast-item">
+                <div class="cast-circle" id="blair-image">B</div>
+                <p class="cast-name">Blair Waldorf</p>
+            </div>
+
+            <div class="cast-item">
+                <div class="cast-circle" id="serena-image">S</div>
+                <p class="cast-name">Serena van der Woodsen</p>
+            </div>
+
+            <div class="cast-item">
+                <div class="cast-circle" id="chuck-image">C</div>
+                <p class="cast-name">Chuck Bass</p>
+            </div>
+        </aside>
+    </div>
+
+    <div class="xoxo">💋 XOXO</div>
+
+    <script>
+        const grid = document.getElementById("character-grid");
+        const searchInput = document.getElementById("search");
+        const countLabel = document.getElementById("cast-count");
+
+        let allCharacters = [];
+
+        const mainCast = [
+            "Blake Lively",
+            "Leighton Meester",
+            "Penn Badgley",
+            "Chace Crawford",
+            "Ed Westwick",
+            "Kelly Rutherford",
+            "Matthew Settle",
+            "Taylor Momsen",
+            "Jessica Szohr",
+            "Zuzanna Szadkowski"
+        ];
+
+        const characterNames = {
+            "Blake Lively": "Serena van der Woodsen",
+            "Leighton Meester": "Blair Waldorf",
+            "Penn Badgley": "Dan Humphrey",
+            "Chace Crawford": "Nate Archibald",
+            "Ed Westwick": "Chuck Bass",
+            "Kelly Rutherford": "Lily van der Woodsen",
+            "Matthew Settle": "Rufus Humphrey",
+            "Taylor Momsen": "Jenny Humphrey",
+            "Jessica Szohr": "Vanessa Abrams",
+            "Zuzanna Szadkowski": "Dorota Kishlovsky"
+        };
+
+        const descriptions = {
+            "Blake Lively":
+                "The glamorous golden girl whose return changed everything.",
+            "Leighton Meester":
+                "The ambitious queen of the Upper East Side.",
+            "Penn Badgley":
+                "The Brooklyn outsider with a talent for getting close to secrets.",
+            "Chace Crawford":
+                "The charming golden boy caught between loyalty and love.",
+            "Ed Westwick":
+                "The complicated heir with a sharp mind and a darker side.",
+            "Kelly Rutherford":
+                "A society mother who knows how to protect her world.",
+            "Matthew Settle":
+                "A musician and father trying to keep his family grounded.",
+            "Taylor Momsen":
+                "A young outsider determined to create her own identity.",
+            "Jessica Szohr":
+                "A Brooklyn insider who finds herself in Manhattan's social world.",
+            "Zuzanna Szadkowski":
+                "The loyal household presence who knows more than she lets on."
+        };
+
+        function normalize(value) {
+            return (value || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+        }
+
+        function createPlaceholder(name) {
+            const placeholder = document.createElement("div");
+            placeholder.className = "image-placeholder";
+            placeholder.textContent = name.charAt(0) || "?";
+            return placeholder;
+        }
+
+        function createCard(member, index) {
+            const card = document.createElement("article");
+            card.className = "character-card";
+
+            const person = member.person;
+            const imageUrl = person.image?.original || person.image?.medium;
+
+            if (imageUrl) {
+                const image = document.createElement("img");
+                image.className = "character-image";
+                image.src = imageUrl;
+                image.alt = (characterNames[person.name] || member.character)
+                    + " played by " + person.name;
+                image.loading = "lazy";
+
+                image.onerror = () => {
+                    image.replaceWith(createPlaceholder(person.name));
+                };
+
+                card.appendChild(image);
+            } else {
+                card.appendChild(createPlaceholder(person.name));
+            }
+
+            const content = document.createElement("div");
+            content.className = "card-content";
+
+            const number = document.createElement("span");
+            number.className = "character-number";
+            number.textContent =
+                "THE INNER CIRCLE · " + String(index + 1).padStart(2, "0");
+
+            const heading = document.createElement("h2");
+            heading.className = "character-name";
+            heading.textContent = characterNames[person.name] || member.character;
+
+            const actor = document.createElement("p");
+            actor.className = "actor-name";
+            actor.textContent = "Portrayed by " + person.name;
+
+            const description = document.createElement("p");
+            description.className = "character-description";
+            description.textContent =
+                descriptions[person.name] ||
+                "Discover this member of the Gossip Girl universe.";
+
+            content.append(number, heading, actor, description);
+            card.appendChild(content);
+
+            return card;
+        }
+
+        function renderCharacters(list) {
+            grid.replaceChildren();
+
+            if (!list.length) {
+                const message = document.createElement("p");
+                message.className = "status";
+                message.textContent =
+                    "No characters found. Try another search.";
+                grid.appendChild(message);
+                countLabel.textContent = "No matching characters.";
+                return;
+            }
+
+            list.forEach((member, index) => {
+                grid.appendChild(createCard(member, index));
+            });
+
+            countLabel.textContent =
+                "Showing " + list.length +
+                " cast members from the original series.";
+        }
+
+        function setFeaturedImage(elementId, member) {
+            const container = document.getElementById(elementId);
+            const imageUrl = member?.person?.image?.medium;
+
+            if (!container || !imageUrl) return;
+
+            const image = document.createElement("img");
+            image.src = imageUrl;
+            image.alt = member.person.name;
+            image.loading = "lazy";
+            image.onerror = () => {
+                container.textContent = container.id === "blair-image" ? "B" :
+                    container.id === "serena-image" ? "S" : "C";
+            };
+
+            container.replaceChildren(image);
+        }
+
+        async function loadCharacters() {
+            grid.replaceChildren();
+
+            const loading = document.createElement("p");
+            loading.className = "status";
+            loading.textContent = "Loading the original cast...";
+            grid.appendChild(loading);
+
+            try {
+                const searchResponse = await fetch(
+                    "https://api.tvmaze.com/search/shows?q=Gossip%20Girl"
+                );
+
+                if (!searchResponse.ok) {
+                    throw new Error("Show search failed");
+                }
+
+                const shows = await searchResponse.json();
+
+                const originalShow = shows.find(item =>
+                    item.show.name.toLowerCase() === "gossip girl" &&
+                    item.show.premiered?.startsWith("2007")
+                );
+
+                if (!originalShow) {
+                    throw new Error("Original show not found");
+                }
+
+                const castResponse = await fetch(
+                    `https://api.tvmaze.com/shows/${originalShow.show.id}/cast`
+                );
+
+                if (!castResponse.ok) {
+                    throw new Error("Cast request failed");
+                }
+
+                const cast = await castResponse.json();
+
+                const orderedMainCast = mainCast
+                    .map(name => cast.find(member =>
+                        normalize(member.person.name) === normalize(name)
+                    ))
+                    .filter(Boolean);
+
+                const mainNames = new Set(
+                    orderedMainCast.map(member =>
+                        normalize(member.person.name)
+                    )
+                );
+
+                const remainingCast = cast.filter(member =>
+                    !mainNames.has(normalize(member.person.name))
+                );
+
+                allCharacters = [...orderedMainCast, ...remainingCast];
+
+                setFeaturedImage(
+                    "blair-image",
+                    allCharacters.find(member =>
+                        member.person.name === "Leighton Meester"
+                    )
+                );
+
+                setFeaturedImage(
+                    "serena-image",
+                    allCharacters.find(member =>
+                        member.person.name === "Blake Lively"
+                    )
+                );
+
+                setFeaturedImage(
+                    "chuck-image",
+                    allCharacters.find(member =>
+                        member.person.name === "Ed Westwick"
+                    )
+                );
+
+                renderCharacters(allCharacters);
+
+            } catch (error) {
+                console.error("Unable to load cast:", error);
+
+                grid.replaceChildren();
+
+                const wrapper = document.createElement("div");
+                wrapper.className = "status";
+
+                const message = document.createElement("p");
+                message.textContent =
+                    "We couldn't load the cast right now. Check your internet connection and try again.";
+
+                const retry = document.createElement("button");
+                retry.className = "retry-button";
+                retry.textContent = "Try Again";
+                retry.addEventListener("click", loadCharacters);
+
+                wrapper.append(message, retry);
+                grid.appendChild(wrapper);
+
+                countLabel.textContent = "The cast is temporarily unavailable.";
+            }
+        }
+
+        searchInput.addEventListener("input", () => {
+            const query = normalize(searchInput.value);
+
+            const filtered = allCharacters.filter(member => {
+                const actorName = member.person.name;
+                const characterName =
+                    characterNames[actorName] || member.character;
+
+                return normalize(actorName).includes(query) ||
+                    normalize(characterName).includes(query);
+            });
+
+            renderCharacters(filtered);
+        });
+
+        loadCharacters();
+    </script>
+</body>
+</html>

@@ -1,0 +1,1923 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Nour Elsayed">
+    <meta name="description" content="Secrets, confessions and whispers from Gossip Girl.">
+    <meta name="theme-color" content="#090909">
+    <title>Gossip Girl | The Secrets</title>
+    <link rel="icon" type="image/jpeg" href="images/girl.jpg">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+
+    <style>
+        :root {
+            --black: #090909;
+            --panel: #121212;
+            --gold: #d8bb78;
+            --light-gold: #f0dfae;
+            --white: #f8f5ef;
+            --muted: #aaa39a;
+            --border: rgba(216, 187, 120, .25);
+            --red: #ffb3a9;
+            --green: #c5e6c1;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 24px;
+        }
+
+        body {
+            min-height: 100vh;
+            overflow-x: hidden;
+            background: var(--black);
+            color: var(--white);
+            font-family: "Montserrat", sans-serif;
+        }
+
+        body, button, input, select, textarea {
+            font-family: "Montserrat", sans-serif;
+        }
+
+        button, input, select, textarea {
+            font-size: inherit;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button, a, input, select, textarea {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        button:focus-visible,
+        a:focus-visible,
+        input:focus-visible,
+        select:focus-visible,
+        textarea:focus-visible {
+            outline: 2px solid var(--light-gold);
+            outline-offset: 4px;
+        }
+
+        button {
+            color: inherit;
+        }
+
+        button:disabled {
+            opacity: .55;
+            cursor: not-allowed;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        .city-background {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background:
+                radial-gradient(ellipse at 15% 80%, rgba(150,106,36,.15), transparent 40%),
+                radial-gradient(ellipse at 80% 20%, rgba(110,85,46,.12), transparent 38%),
+                linear-gradient(180deg, #080808, #15120d 70%, #080808);
+        }
+
+        .city-background::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            opacity: .55;
+            background:
+                radial-gradient(circle at 12% 18%, #d8bb78 0 1px, transparent 2px),
+                radial-gradient(circle at 77% 31%, #f0dfae 0 1px, transparent 2px),
+                radial-gradient(circle at 43% 12%, #d8bb78 0 1px, transparent 2px),
+                radial-gradient(circle at 89% 68%, #d8bb78 0 1px, transparent 2px),
+                radial-gradient(circle at 22% 55%, #f0dfae 0 1px, transparent 2px);
+            background-size: 190px 180px, 240px 210px, 280px 260px, 230px 220px, 300px 270px;
+        }
+
+        .page-layout {
+            width: min(1500px, 100%);
+            min-height: 100vh;
+            margin: auto;
+            padding: 32px 38px;
+            display: grid;
+            grid-template-columns: 190px minmax(0, 1fr) 125px;
+            gap: 30px;
+        }
+
+        /* LEFT SIDEBAR */
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 34px;
+            padding: 10px 0;
+        }
+
+        .brand {
+            color: var(--gold);
+            font: 600 1.3rem/1.5 "Cinzel", serif;
+            letter-spacing: 2px;
+        }
+
+        .brand small {
+            display: block;
+            color: var(--muted);
+            font: 9px "Montserrat", sans-serif;
+            letter-spacing: 3px;
+        }
+
+        nav {
+            display: flex;
+            flex-direction: column;
+            gap: 23px;
+            width: 100%;
+        }
+
+        nav a {
+            color: #c9c2b8;
+            font-size: .72rem;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+            transition: color .2s;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: var(--light-gold);
+        }
+
+        nav a.active::before {
+            content: "✦";
+            margin-right: 8px;
+            color: var(--gold);
+        }
+
+        .sidebar-note {
+            margin-top: auto;
+            max-width: 175px;
+            color: var(--muted);
+            font: .75rem/1.9 "Cinzel", serif;
+        }
+
+        .sidebar-note span,
+        .rail-note span {
+            color: var(--gold);
+        }
+
+        /* MAIN CONTENT */
+
+        .main-content {
+            min-width: 0;
+            padding: 25px 0;
+        }
+
+        .eyebrow {
+            margin-bottom: 20px;
+            color: var(--gold);
+            font-size: .67rem;
+            letter-spacing: 3.5px;
+            text-transform: uppercase;
+        }
+
+        .hero-title {
+            margin-bottom: 22px;
+            font: 500 clamp(2.3rem, 4vw, 4rem)/1.2 "Cinzel", serif;
+            letter-spacing: -1px;
+        }
+
+        .hero-title span {
+            display: block;
+            color: var(--gold);
+        }
+
+        .hero-description {
+            max-width: 650px;
+            color: #c2bbb1;
+            font-size: .86rem;
+            line-height: 1.95;
+        }
+
+        .hero-divider {
+            width: 100%;
+            height: 1px;
+            margin: 26px 0;
+            background: linear-gradient(90deg, var(--gold), transparent);
+            opacity: .5;
+        }
+
+        .secrets-heading {
+            margin-bottom: 12px;
+            color: var(--light-gold);
+            font: 500 1rem "Cinzel", serif;
+            letter-spacing: 1.5px;
+        }
+
+        .section-description {
+            margin-bottom: 22px;
+            color: var(--muted);
+            font-size: .78rem;
+            line-height: 1.9;
+        }
+
+        /* FEATURED SECRET */
+
+        .featured-section {
+            margin-bottom: 35px;
+        }
+
+        .featured-card {
+            position: relative;
+            overflow: hidden;
+            padding: clamp(24px, 4vw, 42px);
+            border: 1px solid rgba(216,187,120,.65);
+            background:
+                radial-gradient(ellipse at 100% 0%, rgba(216,187,120,.14), transparent 48%),
+                linear-gradient(135deg, #211c12, #100f0d 65%, #17130d);
+            box-shadow: 0 15px 45px rgba(0,0,0,.2);
+            animation: revealCard .5s ease both;
+        }
+
+        .featured-topline {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 22px;
+        }
+
+        .featured-badge {
+            padding: 8px 11px;
+            border: 1px solid rgba(216,187,120,.5);
+            color: var(--light-gold);
+            font-size: .59rem;
+            letter-spacing: 1.7px;
+            text-transform: uppercase;
+        }
+
+        .featured-date {
+            color: var(--muted);
+            font-size: .63rem;
+        }
+
+        .featured-title {
+            margin-bottom: 16px;
+            color: var(--gold);
+            font: 500 clamp(1.25rem, 2.5vw, 1.8rem)/1.5 "Cinzel", serif;
+        }
+
+        .featured-message {
+            max-width: 780px;
+            margin-bottom: 25px;
+            color: #e2dbd0;
+            font-size: .88rem;
+            line-height: 2.1;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .featured-signature {
+            color: var(--gold);
+            font: italic .8rem "Cinzel", serif;
+        }
+
+        .featured-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 24px;
+            padding-top: 17px;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            font-size: .64rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .featured-footer > span:nth-child(2) {
+            color: var(--gold);
+        }
+
+        /* SEARCH AND SORT */
+
+        .secret-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin: 25px 0 20px;
+        }
+
+        .secret-count {
+            color: var(--muted);
+            font-size: .73rem;
+            line-height: 1.8;
+        }
+
+        .secret-count strong {
+            color: var(--light-gold);
+        }
+
+        .toolbar-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .search-wrap {
+            position: relative;
+            flex: 1 1 220px;
+            min-width: 0;
+        }
+
+        .search-icon {
+            position: absolute;
+            top: 50%;
+            left: 14px;
+            transform: translateY(-50%);
+            color: var(--gold);
+            pointer-events: none;
+        }
+
+        .search-input,
+        .sort-select {
+            width: 100%;
+            min-height: 46px;
+            border: 1px solid var(--border);
+            border-radius: 0;
+            background: rgba(18,18,18,.9);
+            color: var(--white);
+            font-size: .75rem;
+            transition: border-color .2s;
+        }
+
+        .search-input {
+            padding: 0 14px 0 40px;
+        }
+
+        .search-input::placeholder {
+            color: #898278;
+        }
+
+        .search-input:focus,
+        .sort-select:focus {
+            border-color: var(--gold);
+            outline: none;
+        }
+
+        .sort-select {
+            flex: 0 1 190px;
+            padding: 0 12px;
+            cursor: pointer;
+        }
+
+        .sort-select option {
+            background: #121212;
+        }
+
+        .clear-button {
+            min-height: 46px;
+            padding: 0 15px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--muted);
+            font-size: .67rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .clear-button:hover {
+            border-color: var(--gold);
+            color: var(--light-gold);
+        }
+
+        #gossip-status,
+        .empty-state {
+            padding: 22px;
+            margin: 8px 0 24px;
+            border: 1px solid var(--border);
+            background: rgba(18,18,18,.75);
+            color: var(--light-gold);
+            text-align: center;
+            font-size: .78rem;
+            line-height: 1.9;
+        }
+
+        .empty-state {
+            border-style: dashed;
+            color: var(--muted);
+        }
+
+        .empty-state strong {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--light-gold);
+            font: 500 1rem "Cinzel", serif;
+        }
+
+        /* SECRET CARDS */
+
+        #community-gossips {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .secret-card {
+            min-width: 0;
+            padding: 23px;
+            border: 1px solid var(--border);
+            background: linear-gradient(145deg, rgba(26,24,20,.96), rgba(13,13,13,.96));
+            overflow-wrap: anywhere;
+            transition: border-color .25s, transform .25s, box-shadow .25s;
+            animation: revealCard .45s ease both;
+        }
+
+        .secret-card:hover {
+            border-color: var(--gold);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0,0,0,.22);
+        }
+
+        .secret-label {
+            display: block;
+            margin-bottom: 17px;
+            color: var(--gold);
+            font-size: .62rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .secret-card h3 {
+            margin-bottom: 15px;
+            color: var(--light-gold);
+            font: 500 1rem/1.7 "Cinzel", serif;
+        }
+
+        .secret-message {
+            margin-bottom: 22px;
+            color: #d4cec4;
+            font-size: .79rem;
+            line-height: 1.95;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .secret-signature {
+            display: block;
+            margin-bottom: 13px;
+            color: var(--gold);
+            font: italic .72rem "Cinzel", serif;
+        }
+
+        .secret-date {
+            padding-top: 12px;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            font-size: .62rem;
+            letter-spacing: .8px;
+        }
+
+        /* REPORT BUTTONS */
+
+        .report-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            min-height: 34px;
+            padding: 7px 10px;
+            border: 1px solid rgba(216,187,120,.28);
+            background: transparent;
+            color: #b8afa2;
+            font-size: .62rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: border-color .2s, color .2s;
+        }
+
+        .report-button:hover {
+            border-color: var(--red);
+            color: var(--red);
+        }
+
+        .card-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 15px;
+        }
+
+        /* LOAD MORE */
+
+        .load-more-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        .load-more-button {
+            min-width: 190px;
+            min-height: 46px;
+            padding: 0 22px;
+            border: 1px solid var(--gold);
+            background: transparent;
+            color: var(--light-gold);
+            font-size: .68rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .load-more-button:hover:not(:disabled) {
+            background: var(--gold);
+            color: var(--black);
+        }
+
+        .load-more-note {
+            color: var(--muted);
+            font-size: .64rem;
+        }
+
+        /* REPORT MODAL */
+
+        .report-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            display: grid;
+            place-items: center;
+            padding: 20px;
+            overflow-y: auto;
+            background: rgba(0,0,0,.82);
+            backdrop-filter: blur(6px);
+        }
+
+        .report-modal {
+            position: relative;
+            width: min(520px, 100%);
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+            padding: clamp(22px, 5vw, 34px);
+            border: 1px solid rgba(216,187,120,.6);
+            background:
+                radial-gradient(ellipse at 100% 0%, rgba(216,187,120,.10), transparent 50%),
+                #11100e;
+            box-shadow: 0 25px 90px rgba(0,0,0,.65);
+            animation: revealCard .25s ease both;
+        }
+
+        .modal-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 12px;
+        }
+
+        .modal-eyebrow {
+            margin-bottom: 10px;
+            color: var(--gold);
+            font-size: .62rem;
+            letter-spacing: 2.5px;
+        }
+
+        .modal-title {
+            color: var(--light-gold);
+            font: 500 1.45rem/1.4 "Cinzel", serif;
+        }
+
+        .modal-close {
+            flex: 0 0 auto;
+            width: 38px;
+            height: 38px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--gold);
+            font-size: 1.3rem;
+            cursor: pointer;
+        }
+
+        .modal-close:hover {
+            border-color: var(--gold);
+        }
+
+        .modal-description {
+            margin-bottom: 22px;
+            color: var(--muted);
+            font-size: .77rem;
+            line-height: 1.8;
+        }
+
+        .report-preview {
+            max-height: 95px;
+            overflow: auto;
+            margin-bottom: 22px;
+            padding: 12px;
+            border-left: 2px solid var(--gold);
+            background: rgba(255,255,255,.035);
+            color: #cfc7bb;
+            font-size: .74rem;
+            line-height: 1.8;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .report-field {
+            margin-bottom: 19px;
+        }
+
+        .report-field label {
+            display: block;
+            margin-bottom: 9px;
+            color: var(--gold);
+            font-size: .63rem;
+            letter-spacing: 1.4px;
+        }
+
+        .report-field select,
+        .report-field textarea {
+            display: block;
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 0;
+            padding: 12px;
+            background: #090909;
+            color: var(--white);
+            font-size: .78rem;
+        }
+
+        .report-field select {
+            min-height: 44px;
+        }
+
+        .report-field select option {
+            background: #111;
+        }
+
+        .report-field textarea {
+            min-height: 105px;
+            resize: vertical;
+            line-height: 1.8;
+        }
+
+        .report-field textarea::placeholder {
+            color: #77716a;
+        }
+
+        .report-help {
+            margin-top: 8px;
+            color: #8d867c;
+            font-size: .65rem;
+            line-height: 1.7;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 22px;
+        }
+
+        .modal-submit,
+        .modal-cancel {
+            min-height: 45px;
+            padding: 0 15px;
+            cursor: pointer;
+            font-size: .66rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .modal-submit {
+            flex: 1;
+            border: 1px solid var(--gold);
+            background: var(--gold);
+            color: #090909;
+        }
+
+        .modal-submit:hover:not(:disabled) {
+            background: var(--light-gold);
+        }
+
+        .modal-cancel {
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--muted);
+        }
+
+        .modal-cancel:hover {
+            border-color: var(--gold);
+            color: var(--light-gold);
+        }
+
+        .report-feedback {
+            margin-top: 16px;
+            font-size: .76rem;
+            line-height: 1.8;
+            overflow-wrap: anywhere;
+        }
+
+        .report-feedback.success {
+            color: var(--green);
+        }
+
+        .report-feedback.error {
+            color: var(--red);
+        }
+
+        /* RIGHT RAIL */
+
+        .cast-rail {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 22px;
+        }
+
+        .rail-title {
+            color: var(--gold);
+            font: .7rem "Cinzel", serif;
+            letter-spacing: 2px;
+            text-align: center;
+        }
+
+        .cast-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            text-align: center;
+            transition: transform .2s;
+        }
+
+        .cast-link:hover {
+            transform: scale(1.05);
+        }
+
+        .cast-circle {
+            display: grid;
+            place-items: center;
+            width: 82px;
+            height: 82px;
+            border: 1px solid var(--gold);
+            border-radius: 50%;
+            background: #211b11;
+            color: var(--gold);
+            font: 1.4rem "Cinzel", serif;
+        }
+
+        .cast-name {
+            max-width: 120px;
+            color: #ded5c8;
+            font-size: .62rem;
+            letter-spacing: .6px;
+            line-height: 1.5;
+            text-transform: uppercase;
+        }
+
+        .rail-note {
+            color: var(--muted);
+            font: .68rem/1.9 "Cinzel", serif;
+            text-align: center;
+        }
+
+        /* EXPLORE AND FOOTER */
+
+        .explore-section {
+            grid-column: 1 / -1;
+            padding: 25px 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .section-title {
+            margin-bottom: 10px;
+            color: var(--gold);
+            font: 500 1.3rem "Cinzel", serif;
+            letter-spacing: 2px;
+        }
+
+        .explore-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
+        .action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 42px;
+            padding: 0 16px;
+            border: 1px solid var(--gold);
+            color: var(--light-gold);
+            font-size: .65rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: .2s;
+        }
+
+        .action:hover {
+            background: var(--gold);
+            color: #111;
+        }
+
+        iframe {
+            display: block;
+            width: 100%;
+            height: 560px;
+            border: 1px solid var(--border);
+            background: var(--black);
+        }
+
+        footer {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            font-size: .68rem;
+            letter-spacing: .8px;
+        }
+
+        footer strong {
+            color: var(--gold);
+            font-weight: 500;
+        }
+
+        .fixed-gossip {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 5;
+            padding: 11px 16px;
+            border: 1px solid var(--gold);
+            background: rgba(9,9,9,.9);
+            color: var(--gold);
+            font: 600 .8rem "Cinzel", serif;
+            letter-spacing: 1px;
+        }
+
+        .fixed-gossip:hover {
+            background: var(--gold);
+            color: var(--black);
+        }
+
+        @keyframes revealCard {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* TABLET */
+
+        @media (max-width: 1000px) {
+            .page-layout {
+                grid-template-columns: 155px minmax(0, 1fr);
+                gap: 24px;
+                padding: 26px;
+            }
+
+            .cast-rail {
+                grid-column: 1 / -1;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: flex-start;
+                padding: 20px 0;
+                border-top: 1px solid var(--border);
+            }
+
+            .rail-title {
+                width: 100%;
+                text-align: left;
+            }
+
+            .rail-note {
+                text-align: left;
+            }
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 620px) {
+            .page-layout {
+                display: flex;
+                flex-direction: column;
+                gap: 28px;
+                padding: 22px 18px;
+            }
+
+            .sidebar {
+                gap: 18px;
+            }
+
+            nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 14px 17px;
+            }
+
+            nav a {
+                font-size: .63rem;
+            }
+
+            nav a.active::before {
+                display: none;
+            }
+
+            .sidebar-note {
+                display: none;
+            }
+
+            .main-content {
+                padding: 15px 0;
+            }
+
+            .hero-title {
+                font-size: clamp(2.3rem, 10vw, 3.8rem);
+            }
+
+            #community-gossips {
+                grid-template-columns: 1fr;
+            }
+
+            .secret-card {
+                padding: 20px;
+            }
+
+            .featured-card {
+                padding: 24px 20px;
+            }
+
+            .toolbar-controls {
+                flex-direction: column;
+            }
+
+            .search-wrap,
+            .sort-select,
+            .clear-button {
+                width: 100%;
+                flex: auto;
+            }
+
+            .cast-circle {
+                width: 64px;
+                height: 64px;
+            }
+
+            .cast-link {
+                max-width: 82px;
+            }
+
+            .cast-name {
+                font-size: .56rem;
+            }
+
+            iframe {
+                height: 460px;
+            }
+
+            footer {
+                flex-direction: column;
+            }
+
+            .fixed-gossip {
+                right: 12px;
+                bottom: 12px;
+                font-size: .7rem;
+            }
+
+            .modal-actions {
+                flex-direction: column;
+            }
+
+            .modal-cancel {
+                min-height: 42px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: .01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="city-background" aria-hidden="true"></div>
+
+    <div class="page-layout">
+
+        <!-- LEFT SIDEBAR -->
+        <aside class="sidebar">
+            <a href="index.html" class="brand">
+                GOSSIP GIRL
+                <small>UPPER EAST SIDE</small>
+            </a>
+
+            <nav aria-label="Main navigation">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="characters.html">Characters</a>
+                <a class="active" href="gossip.html" aria-current="page">Gossip</a>
+                <a href="gallery.html">Gallery</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+
+            <p class="sidebar-note">
+                You know you love me.
+                <br>
+                <span>XOXO, Gossip Girl.</span>
+            </p>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <p class="eyebrow">Whispers from the Upper East Side</p>
+
+            <h1 class="hero-title">
+                EVERY SECRET
+                <span>LEAVES A TRACE.</span>
+            </h1>
+
+            <p class="hero-description">
+                Every secret has a story. Every confession leaves a trace.
+                Here's what made it past the Gossip Girl approval list.
+                Read carefully. You never know who's watching.
+            </p>
+
+            <div class="hero-divider"></div>
+
+            <!-- FEATURED SECRET -->
+            <section class="featured-section" aria-labelledby="featured-section-title">
+                <h2 class="secrets-heading" id="featured-section-title">
+                    THE SECRET EVERYONE'S WHISPERING ABOUT
+                </h2>
+
+                <p class="section-description">
+                    One secret takes center stage. Today's spotlight belongs to the latest approved whisper.
+                </p>
+
+                <div id="featured-secret" class="featured-card" hidden></div>
+            </section>
+
+            <!-- COMMUNITY SECRETS -->
+            <section aria-labelledby="community-title">
+                <h2 class="secrets-heading" id="community-title">THE SECRET SOCIETY</h2>
+
+                <p class="section-description">
+                    The whispers, confessions, and secrets approved for the inner circle.
+                    Search the rumors, change the order, and uncover what you've missed.
+                </p>
+
+                <div id="gossip-status" role="status" aria-live="polite">
+                    💋 Gathering the latest secrets...
+                </div>
+
+                <div class="secret-toolbar">
+                    <p class="secret-count" id="secret-count" aria-live="polite">
+                        Approved secrets: <strong>...</strong>
+                    </p>
+
+                    <div class="toolbar-controls">
+                        <div class="search-wrap">
+                            <span class="search-icon" aria-hidden="true">⌕</span>
+                            <input
+                                type="search"
+                                id="secret-search"
+                                class="search-input"
+                                placeholder="Search the secrets..."
+                                aria-label="Search approved secrets"
+                                autocomplete="off">
+                        </div>
+
+                        <select id="secret-sort" class="sort-select" aria-label="Sort secrets by date">
+                            <option value="newest">Newest first</option>
+                            <option value="oldest">Oldest first</option>
+                        </select>
+
+                        <button type="button" id="clear-filters" class="clear-button">
+                            Clear
+                        </button>
+                    </div>
+                </div>
+
+                <div id="community-gossips"></div>
+
+                <div id="empty-state" class="empty-state" hidden>
+                    <strong>No secrets found.</strong>
+                    Try another search. The truth is still out there.
+                </div>
+
+                <div class="load-more-wrap" id="load-more-wrap" hidden>
+                    <button type="button" id="load-more" class="load-more-button">
+                        Load More Secrets
+                    </button>
+                    <p id="load-more-note" class="load-more-note"></p>
+                </div>
+            </section>
+        </main>
+
+        <!-- RIGHT RAIL -->
+        <aside class="cast-rail">
+            <p class="rail-title">THE ELITE</p>
+
+            <a class="cast-link" href="characters.html">
+                <div class="cast-circle">B</div>
+                <span class="cast-name">Blair Waldorf</span>
+            </a>
+
+            <a class="cast-link" href="characters.html">
+                <div class="cast-circle">S</div>
+                <span class="cast-name">Serena van der Woodsen</span>
+            </a>
+
+            <a class="cast-link" href="characters.html">
+                <div class="cast-circle">C</div>
+                <span class="cast-name">Chuck Bass</span>
+            </a>
+
+            <p class="rail-note">
+                Every name<br>has a story.<br>
+                <span>XOXO</span>
+            </p>
+        </aside>
+
+        <!-- EXPLORE -->
+        <section class="explore-section">
+            <h2 class="section-title">EXPLORE THE INNER CIRCLE</h2>
+
+            <p class="section-description">
+                The secrets are only the beginning. Explore the people and places behind them.
+            </p>
+
+            <div class="explore-links">
+                <a href="characters.html" target="infoFrame" class="action">Characters</a>
+                <a href="gossip.html" target="infoFrame" class="action">Gossip</a>
+                <a href="gallery.html" target="infoFrame" class="action">Gallery</a>
+            </div>
+
+            <iframe
+                name="infoFrame"
+                src="characters.html"
+                title="Explore Gossip Girl pages"
+                loading="lazy">
+            </iframe>
+        </section>
+
+        <!-- FOOTER -->
+        <footer>
+            <p>MANHATTAN IS NEVER SHORT OF SECRETS.</p>
+            <p><strong>XOXO, GOSSIP GIRL</strong> · FAN-MADE WEBSITE</p>
+        </footer>
+    </div>
+
+    <a href="gossip.html" class="fixed-gossip">💋 XOXO</a>
+
+    <!-- REPORT DIALOG -->
+    <div
+        id="report-overlay"
+        class="report-overlay"
+        hidden
+        role="presentation">
+
+        <section
+            class="report-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="report-title"
+            aria-describedby="report-description">
+
+            <div class="modal-top">
+                <div>
+                    <p class="modal-eyebrow">KEEP THE INNER CIRCLE SAFE</p>
+                    <h2 class="modal-title" id="report-title">REPORT A SECRET</h2>
+                </div>
+
+                <button
+                    type="button"
+                    id="report-close"
+                    class="modal-close"
+                    aria-label="Close report window">×</button>
+            </div>
+
+            <p class="modal-description" id="report-description">
+                Tell us why this post needs another look. Reports are sent privately
+                to the moderation team for review.
+            </p>
+
+            <div id="report-preview" class="report-preview"></div>
+
+            <form id="report-form">
+                <div class="report-field">
+                    <label for="report-reason">WHY ARE YOU REPORTING THIS?</label>
+
+                    <!-- Values must match the Supabase database constraint -->
+                    <select id="report-reason" name="reason" required>
+                        <option value="" selected disabled>Choose a reason...</option>
+                        <option value="Spam or advertising">Spam or advertising</option>
+                        <option value="Harassment or bullying">Harassment or bullying</option>
+                        <option value="Private or identifying information">Private or identifying information</option>
+                        <option value="False or harmful rumor">False or harmful rumor</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="report-field">
+                    <label for="report-details">ADDITIONAL DETAILS (OPTIONAL)</label>
+
+                    <textarea
+                        id="report-details"
+                        name="details"
+                        maxlength="500"
+                        placeholder="Share a little context, if needed..."></textarea>
+
+                    <p class="report-help">
+                        Up to 500 characters. Please don't include passwords or sensitive personal information.
+                    </p>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="submit" id="report-submit" class="modal-submit">
+                        SUBMIT REPORT
+                    </button>
+
+                    <button type="button" id="report-cancel" class="modal-cancel">
+                        CANCEL
+                    </button>
+                </div>
+
+                <p id="report-feedback" class="report-feedback" role="status" aria-live="polite"></p>
+            </form>
+        </section>
+    </div>
+
+    <script>
+        (() => {
+            "use strict";
+
+            const statusBox = document.getElementById("gossip-status");
+            const featuredBox = document.getElementById("featured-secret");
+            const gossipContainer = document.getElementById("community-gossips");
+            const countBox = document.getElementById("secret-count");
+            const searchInput = document.getElementById("secret-search");
+            const sortSelect = document.getElementById("secret-sort");
+            const clearButton = document.getElementById("clear-filters");
+            const emptyState = document.getElementById("empty-state");
+            const loadMoreWrap = document.getElementById("load-more-wrap");
+            const loadMoreButton = document.getElementById("load-more");
+            const loadMoreNote = document.getElementById("load-more-note");
+
+            const reportOverlay = document.getElementById("report-overlay");
+            const reportForm = document.getElementById("report-form");
+            const reportReason = document.getElementById("report-reason");
+            const reportDetails = document.getElementById("report-details");
+            const reportPreview = document.getElementById("report-preview");
+            const reportFeedback = document.getElementById("report-feedback");
+            const reportSubmit = document.getElementById("report-submit");
+            const reportClose = document.getElementById("report-close");
+            const reportCancel = document.getElementById("report-cancel");
+
+            const config = window.GG_CONFIG;
+            const PAGE_SIZE = 6;
+            const REPORT_COOLDOWN_MS = 15000;
+
+            const ALLOWED_REASONS = [
+                "Spam or advertising",
+                "Harassment or bullying",
+                "Private or identifying information",
+                "False or harmful rumor",
+                "Other"
+            ];
+
+            let allSecrets = [];
+            let visibleCount = PAGE_SIZE;
+            let loading = false;
+            let hasLoadedSuccessfully = false;
+            let refreshTimer = null;
+            let selectedReportId = null;
+            let lastReportTime = 0;
+            let reportSending = false;
+            let previousFocus = null;
+            let db = null;
+
+            /* GENERAL HELPERS */
+
+            function showStatus(message) {
+                statusBox.textContent = message;
+                statusBox.hidden = false;
+            }
+
+            function hideStatus() {
+                statusBox.hidden = true;
+            }
+
+            function formatDate(value) {
+                if (!value) return "";
+
+                const date = new Date(value);
+
+                if (Number.isNaN(date.getTime())) {
+                    return "";
+                }
+
+                return date.toLocaleDateString(undefined, {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric"
+                });
+            }
+
+            function createElement(tag, className, text) {
+                const element = document.createElement(tag);
+
+                if (className) {
+                    element.className = className;
+                }
+
+                if (text !== undefined) {
+                    element.textContent = text;
+                }
+
+                return element;
+            }
+
+            function createReportButton(id) {
+                const button = createElement("button", "report-button", "⚑ Report");
+
+                button.type = "button";
+                button.dataset.reportId = String(id);
+                button.setAttribute("aria-label", "Report this secret");
+
+                return button;
+            }
+
+            /* SECRET CARDS */
+
+            function createSecretCard(item, index) {
+                const article = createElement("article", "secret-card");
+
+                article.append(
+                    createElement("span", "secret-label", "💋 SPOTTED"),
+                    createElement("h3", "", "A Secret Has Been Spotted..."),
+                    createElement("p", "secret-message", item.message || ""),
+                    createElement("strong", "secret-signature", "XOXO, Gossip Girl.")
+                );
+
+                const dateText = formatDate(item.created_at);
+
+                if (dateText) {
+                    article.appendChild(createElement("p", "secret-date", dateText));
+                }
+
+                const actions = createElement("div", "card-actions");
+                actions.appendChild(createReportButton(item.id));
+                article.appendChild(actions);
+
+                article.style.animationDelay = `${Math.min(index * 45, 270)}ms`;
+
+                return article;
+            }
+
+            function createFeaturedSecret(item) {
+                featuredBox.replaceChildren();
+
+                if (!item) {
+                    featuredBox.hidden = true;
+                    return;
+                }
+
+                const topLine = createElement("div", "featured-topline");
+
+                topLine.appendChild(
+                    createElement("span", "featured-badge", "Featured Secret")
+                );
+
+                const dateText = formatDate(item.created_at);
+
+                if (dateText) {
+                    topLine.appendChild(
+                        createElement("span", "featured-date", dateText)
+                    );
+                }
+
+                const heading = createElement(
+                    "h3",
+                    "featured-title",
+                    "A Secret Worth Whispering About..."
+                );
+
+                const message = createElement(
+                    "p",
+                    "featured-message",
+                    item.message || ""
+                );
+
+                const signature = createElement(
+                    "p",
+                    "featured-signature",
+                    "XOXO, Gossip Girl."
+                );
+
+                const footer = createElement("div", "featured-footer");
+
+                footer.append(
+                    createElement("span", "", "Straight from the inner circle"),
+                    createElement("span", "", "You know you love me"),
+                    createReportButton(item.id)
+                );
+
+                featuredBox.append(topLine, heading, message, signature, footer);
+                featuredBox.hidden = false;
+            }
+
+            /* SEARCH, SORT AND RENDER */
+
+            function getFilteredSecrets() {
+                const query = searchInput.value.trim().toLocaleLowerCase();
+
+                const results = allSecrets.filter(item => {
+                    const message = String(item.message || "").toLocaleLowerCase();
+                    return message.includes(query);
+                });
+
+                results.sort((a, b) => {
+                    const dateA = new Date(a.created_at || 0).getTime() || 0;
+                    const dateB = new Date(b.created_at || 0).getTime() || 0;
+
+                    return sortSelect.value === "oldest"
+                        ? dateA - dateB
+                        : dateB - dateA;
+                });
+
+                return results;
+            }
+
+            function renderSecrets() {
+                const filteredSecrets = getFilteredSecrets();
+
+                /*
+                 * The featured secret is selected from the filtered and sorted list.
+                 * This keeps the featured item consistent with the search and sort.
+                 */
+                const featured = filteredSecrets.length
+                    ? filteredSecrets[0]
+                    : null;
+
+                createFeaturedSecret(featured);
+
+                const regularSecrets = featured
+                    ? filteredSecrets.filter(
+                        item => String(item.id) !== String(featured.id)
+                    )
+                    : [];
+
+                gossipContainer.replaceChildren();
+
+                regularSecrets
+                    .slice(0, visibleCount)
+                    .forEach((item, index) => {
+                        gossipContainer.appendChild(createSecretCard(item, index));
+                    });
+
+                countBox.replaceChildren(
+                    createElement(
+                        "span",
+                        "",
+                        searchInput.value.trim()
+                            ? "Matching secrets: "
+                            : "Approved secrets: "
+                    ),
+                    createElement("strong", "", String(filteredSecrets.length))
+                );
+
+                emptyState.hidden = filteredSecrets.length !== 0;
+
+                if (filteredSecrets.length === 0) {
+                    emptyState.replaceChildren(
+                        createElement("strong", "", "No secrets found."),
+                        document.createTextNode(
+                            "Try another search. The truth is still out there."
+                        )
+                    );
+                }
+
+                const remaining = Math.max(
+                    regularSecrets.length - visibleCount,
+                    0
+                );
+
+                loadMoreWrap.hidden = remaining === 0;
+
+                loadMoreNote.textContent = remaining > 0
+                    ? `${remaining} more ${remaining === 1 ? "secret" : "secrets"} waiting to be uncovered`
+                    : "";
+
+                loadMoreButton.disabled = remaining === 0;
+            }
+
+            /* REPORT DIALOG */
+
+            function setReportFeedback(message, type = "") {
+                reportFeedback.textContent = message;
+                reportFeedback.className = `report-feedback ${type}`;
+            }
+
+            function resetReportButtons() {
+                reportSending = false;
+                reportSubmit.disabled = false;
+                reportClose.disabled = false;
+                reportCancel.disabled = false;
+                reportSubmit.textContent = "SUBMIT REPORT";
+            }
+
+            function openReportDialog(id) {
+                const item = allSecrets.find(
+                    secret => String(secret.id) === String(id)
+                );
+
+                if (!item) {
+                    return;
+                }
+
+                previousFocus = document.activeElement;
+                selectedReportId = String(item.id);
+
+                reportForm.reset();
+                setReportFeedback("");
+                resetReportButtons();
+
+                reportPreview.textContent = item.message || "";
+                reportOverlay.hidden = false;
+                document.body.style.overflow = "hidden";
+
+                reportClose.focus();
+            }
+
+            function closeReportDialog() {
+                if (reportSending) {
+                    return;
+                }
+
+                reportOverlay.hidden = true;
+                selectedReportId = null;
+                document.body.style.overflow = "";
+
+                if (previousFocus && typeof previousFocus.focus === "function") {
+                    previousFocus.focus();
+                }
+            }
+
+            reportClose.addEventListener("click", closeReportDialog);
+            reportCancel.addEventListener("click", closeReportDialog);
+
+            reportOverlay.addEventListener("click", event => {
+                if (event.target === reportOverlay) {
+                    closeReportDialog();
+                }
+            });
+
+            document.addEventListener("keydown", event => {
+                if (event.key === "Escape" && !reportOverlay.hidden) {
+                    closeReportDialog();
+                }
+
+                /*
+                 * A simple keyboard focus loop keeps keyboard navigation inside
+                 * the dialog while it is open.
+                 */
+                if (event.key === "Tab" && !reportOverlay.hidden) {
+                    const focusable = reportOverlay.querySelectorAll(
+                        'button:not(:disabled), select:not(:disabled), textarea:not(:disabled), input:not(:disabled), a[href]'
+                    );
+
+                    if (!focusable.length) {
+                        return;
+                    }
+
+                    const first = focusable[0];
+                    const last = focusable[focusable.length - 1];
+
+                    if (event.shiftKey && document.activeElement === first) {
+                        event.preventDefault();
+                        last.focus();
+                    } else if (
+                        !event.shiftKey &&
+                        document.activeElement === last
+                    ) {
+                        event.preventDefault();
+                        first.focus();
+                    }
+                }
+            });
+
+            /* Report buttons are created dynamically, so use event delegation. */
+            document.addEventListener("click", event => {
+                const button = event.target.closest("[data-report-id]");
+
+                if (!button) {
+                    return;
+                }
+
+                openReportDialog(button.dataset.reportId);
+            });
+
+            reportForm.addEventListener("submit", async event => {
+                event.preventDefault();
+
+                if (reportSending) {
+                    return;
+                }
+
+                if (!reportForm.reportValidity()) {
+                    return;
+                }
+
+                if (!selectedReportId) {
+                    setReportFeedback(
+                        "Please close this window and select a secret again.",
+                        "error"
+                    );
+                    return;
+                }
+
+                const reason = reportReason.value;
+                const details = reportDetails.value.trim();
+
+                if (!ALLOWED_REASONS.includes(reason)) {
+                    setReportFeedback(
+                        "Please choose a valid report reason.",
+                        "error"
+                    );
+                    return;
+                }
+
+                if (details.length > 500) {
+                    setReportFeedback(
+                        "Details must be 500 characters or fewer.",
+                        "error"
+                    );
+                    return;
+                }
+
+                if (!db) {
+                    setReportFeedback(
+                        "The reporting system is unavailable. Please try again later.",
+                        "error"
+                    );
+                    return;
+                }
+
+                const now = Date.now();
+                const elapsed = now - lastReportTime;
+
+                if (elapsed < REPORT_COOLDOWN_MS) {
+                    const seconds = Math.ceil(
+                        (REPORT_COOLDOWN_MS - elapsed) / 1000
+                    );
+
+                    setReportFeedback(
+                        `Please wait ${seconds} seconds before sending another report.`,
+                        "error"
+                    );
+                    return;
+                }
+
+                reportSending = true;
+                reportSubmit.disabled = true;
+                reportClose.disabled = true;
+                reportCancel.disabled = true;
+                reportSubmit.textContent = "SENDING REPORT...";
+                setReportFeedback("Sending your report securely...");
+
+                try {
+                    const { error } = await db
+                        .from("gg_reports")
+                        .insert({
+                            submission_id: selectedReportId,
+                            reason: reason,
+                            details: details || null,
+                            status: "pending"
+                        });
+
+                    if (error) {
+                        console.error("Report submission failed:", error);
+                        throw error;
+                    }
+
+                    lastReportTime = Date.now();
+
+                    setReportFeedback(
+                        "Your report has been submitted privately for review. Thank you for helping keep this space safer.",
+                        "success"
+                    );
+
+                    reportSubmit.textContent = "REPORT RECEIVED";
+
+                    window.setTimeout(() => {
+                        reportSending = false;
+                        reportClose.disabled = false;
+                        reportCancel.disabled = false;
+                        closeReportDialog();
+                        resetReportButtons();
+                    }, 1800);
+
+                } catch (error) {
+                    console.error("Could not submit report:", error);
+
+                    setReportFeedback(
+                        "We couldn't submit your report. Please try again later.",
+                        "error"
+                    );
+
+                    resetReportButtons();
+                    reportSubmit.textContent = "TRY AGAIN";
+                }
+            });
+
+            /* LOAD APPROVED SECRETS */
+
+            if (
+                !config ||
+                !config.supabaseUrl ||
+                !config.supabaseAnonKey ||
+                !window.supabase
+            ) {
+                showStatus(
+                    "We couldn't connect to the secrets database. Please check config.js and refresh."
+                );
+
+                countBox.textContent = "Secrets are unavailable right now.";
+                return;
+            }
+
+            db = window.supabase.createClient(
+                config.supabaseUrl,
+                config.supabaseAnonKey
+            );
+
+            async function loadApprovedSecrets({ initial = false } = {}) {
+                if (loading) {
+                    return;
+                }
+
+                loading = true;
+
+                if (initial && !hasLoadedSuccessfully) {
+                    showStatus("💋 Gathering the latest secrets...");
+                }
+
+                try {
+                    const { data, error } = await db
+                        .from("gg_submissions")
+                        .select("id, message, created_at")
+                        .eq("status", "approved")
+                        .order("created_at", { ascending: false });
+
+                    if (error) {
+                        throw error;
+                    }
+
+                    allSecrets = Array.isArray(data) ? data : [];
+                    hasLoadedSuccessfully = true;
+
+                    if (allSecrets.length === 0) {
+                        featuredBox.hidden = true;
+                        gossipContainer.replaceChildren();
+
+                        countBox.replaceChildren(
+                            document.createTextNode("Approved secrets: "),
+                            createElement("strong", "", "0")
+                        );
+
+                        emptyState.hidden = false;
+                        emptyState.replaceChildren(
+                            createElement(
+                                "strong",
+                                "",
+                                "The inner circle is quiet..."
+                            ),
+                            document.createTextNode(
+                                "No secrets have been approved yet. Check back soon. 💌"
+                            )
+                        );
+
+                        loadMoreWrap.hidden = true;
+
+                        showStatus(
+                            "No secrets have been spotted yet. Yours could be the first. 💌"
+                        );
+
+                        return;
+                    }
+
+                    hideStatus();
+                    renderSecrets();
+
+                } catch (error) {
+                    console.error(
+                        "Failed to load approved secrets:",
+                        error
+                    );
+
+                    if (!hasLoadedSuccessfully) {
+                        showStatus(
+                            "The secrets are temporarily out of reach. Please refresh and try again."
+                        );
+                    } else {
+                        showStatus(
+                            "We couldn't refresh the latest secrets. Showing the last successfully loaded list."
+                        );
+                    }
+                } finally {
+                    loading = false;
+                }
+            }
+
+            /* SEARCH AND FILTER EVENTS */
+
+            searchInput.addEventListener("input", () => {
+                visibleCount = PAGE_SIZE;
+                renderSecrets();
+            });
+
+            sortSelect.addEventListener("change", () => {
+                visibleCount = PAGE_SIZE;
+                renderSecrets();
+            });
+
+            clearButton.addEventListener("click", () => {
+                searchInput.value = "";
+                sortSelect.value = "newest";
+                visibleCount = PAGE_SIZE;
+
+                renderSecrets();
+                searchInput.focus();
+            });
+
+            loadMoreButton.addEventListener("click", () => {
+                visibleCount += PAGE_SIZE;
+                renderSecrets();
+            });
+
+            /* INITIAL LOAD AND AUTOMATIC REFRESH */
+
+            loadApprovedSecrets({ initial: true });
+
+            refreshTimer = window.setInterval(() => {
+                loadApprovedSecrets();
+            }, 30000);
+
+            window.addEventListener("beforeunload", () => {
+                if (refreshTimer !== null) {
+                    window.clearInterval(refreshTimer);
+                }
+            });
+        })();
+    </script>
+</body>
+</html>

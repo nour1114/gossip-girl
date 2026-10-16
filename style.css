@@ -1,0 +1,1183 @@
+
+/* =========================================
+   GOSSIP GIRL | UNIFIED DESIGN SYSTEM
+   Black • Gold • New York After Dark
+========================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+/* 1. DESIGN TOKENS */
+
+:root {
+    --gold: #D4AF37;
+    --gold-light: #F3D77A;
+    --gold-muted: #A88B35;
+
+    --dark: #070707;
+    --dark-soft: #101010;
+    --dark-card: rgba(17, 17, 17, 0.92);
+    --dark-hover: #1C1A14;
+
+    --white: #FFFFFF;
+    --text: #E8E4DA;
+    --muted: #A6A29A;
+
+    --border: rgba(212, 175, 55, 0.35);
+    --border-strong: rgba(212, 175, 55, 0.75);
+
+    --font-heading: 'Cinzel', serif;
+    --font-body: 'Montserrat', sans-serif;
+
+    --page-width: 1200px;
+    --card-width: 70%;
+
+    --radius: 8px;
+    --transition: 0.3s ease;
+}
+
+
+/* 2. RESET */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 100px;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.7;
+
+    background-color: var(--dark);
+
+    background-image:
+        linear-gradient(
+            rgba(5, 5, 5, 0.91),
+            rgba(5, 5, 5, 0.96)
+        ),
+        url("https://images.unsplash.com/photo-1518391846015-55a9cc003b25?auto=format&fit=crop&w=2000&q=85");
+
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+a {
+    color: var(--gold);
+    text-decoration: none;
+    transition: color var(--transition);
+}
+
+a:hover {
+    color: var(--gold-light);
+}
+
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+::selection {
+    color: var(--dark);
+    background-color: var(--gold);
+}
+
+
+/* 3. TYPOGRAPHY */
+
+h1,
+h2,
+h3,
+h4,
+.page-title,
+#main-title {
+    font-family: var(--font-heading);
+    color: var(--gold);
+    line-height: 1.3;
+}
+
+h1,
+h2,
+h3 {
+    margin-top: 0;
+}
+
+h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+}
+
+h2 {
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+}
+
+h3 {
+    font-size: 1.25rem;
+}
+
+p {
+    color: var(--text);
+}
+
+.gold-text {
+    color: var(--gold) !important;
+}
+
+.muted-text {
+    color: var(--muted);
+}
+
+.center {
+    text-align: center;
+}
+
+.eyebrow {
+    color: var(--gold-light);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+}
+
+
+/* 4. HEADER */
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    padding: 16px 5%;
+
+    background: rgba(7, 7, 7, 0.94);
+    border-bottom: 1px solid var(--border);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+#main-title {
+    margin: 0 0 12px;
+    text-align: center;
+
+    font-size: clamp(1.7rem, 4vw, 2.6rem);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+
+    text-shadow: 0 0 22px rgba(212, 175, 55, 0.18);
+}
+
+header p {
+    margin: 4px 0;
+    text-align: center;
+}
+
+
+/* 5. NAVIGATION */
+
+nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px 28px;
+}
+
+nav a {
+    position: relative;
+    display: inline-block;
+
+    padding: 6px 0;
+
+    color: #D0CCC2;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+nav a::after {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    height: 1px;
+    content: "";
+
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--transition);
+}
+
+nav a:hover,
+nav a.active,
+nav a[aria-current="page"] {
+    color: var(--gold-light);
+}
+
+nav a:hover::after,
+nav a.active::after,
+nav a[aria-current="page"]::after {
+    transform: scaleX(1);
+}
+
+
+/* Optional sidebar navigation for the redesigned homepage */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1100;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 22px;
+
+    width: 230px;
+    height: 100vh;
+    padding: 35px 24px;
+
+    overflow-y: auto;
+
+    background: rgba(7, 7, 7, 0.96);
+    border-right: 1px solid var(--border);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+.sidebar nav {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 12px;
+}
+
+.sidebar nav a {
+    padding: 10px 0;
+}
+
+.sidebar-logo {
+    font-family: var(--font-heading);
+    font-size: 1.3rem;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 0.08em;
+}
+
+.sidebar + main,
+.has-sidebar main {
+    margin-left: 230px;
+}
+
+
+/* 6. PAGE LAYOUT */
+
+main {
+    width: 100%;
+    min-height: 70vh;
+    padding-bottom: 50px;
+}
+
+.container,
+.page-container {
+    width: min(92%, var(--page-width));
+    margin: 0 auto;
+}
+
+section {
+    margin-bottom: 55px;
+}
+
+.page-title {
+    margin: 35px 0 20px;
+    text-align: center;
+    letter-spacing: 0.04em;
+}
+
+.section-title {
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.section-subtitle {
+    max-width: 650px;
+    margin: 0 auto 28px;
+
+    color: var(--muted);
+    text-align: center;
+}
+
+
+/* 7. HERO SECTION */
+
+.hero {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    min-height: 65vh;
+    padding: 70px 24px;
+
+    text-align: center;
+    overflow: hidden;
+}
+
+.hero h1 {
+    max-width: 900px;
+    margin: 12px auto;
+
+    font-size: clamp(2.4rem, 7vw, 5.5rem);
+    letter-spacing: 0.06em;
+    text-shadow: 0 5px 30px rgba(0, 0, 0, 0.8);
+}
+
+.hero p {
+    max-width: 650px;
+    margin: 10px auto 25px;
+    color: #D3CEC2;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+}
+
+.hero-divider {
+    width: 80px;
+    height: 1px;
+    margin: 22px auto;
+
+    background: var(--gold);
+}
+
+
+/* 8. BUTTONS */
+
+.btn,
+button,
+.button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+
+    min-height: 44px;
+    padding: 11px 22px;
+
+    color: var(--dark);
+    background: var(--gold);
+
+    border: 1px solid var(--gold);
+    border-radius: 2px;
+
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+
+    transition:
+        background var(--transition),
+        color var(--transition),
+        transform var(--transition),
+        box-shadow var(--transition);
+}
+
+.btn:hover,
+button:hover,
+.button:hover {
+    color: var(--gold-light);
+    background: transparent;
+
+    box-shadow: 0 0 18px rgba(212, 175, 55, 0.12);
+    transform: translateY(-2px);
+}
+
+.btn-outline {
+    color: var(--gold);
+    background: transparent;
+}
+
+.btn-outline:hover {
+    color: var(--dark);
+    background: var(--gold);
+}
+
+
+/* 9. HOME PAGE IMAGE AND VIDEO */
+
+.home-image {
+    display: block;
+
+    width: calc(100% - 40px);
+    max-width: 720px;
+    max-height: 480px;
+
+    margin: 28px auto;
+    object-fit: cover;
+
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.35);
+    transition: transform var(--transition);
+}
+
+.home-image:hover {
+    transform: scale(1.015);
+}
+
+.video {
+    display: block;
+
+    width: min(85%, 850px);
+    height: auto;
+    margin: 30px auto;
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: #000;
+
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+video {
+    max-width: 100%;
+}
+
+
+/* 10. GENERAL CARDS */
+
+.card {
+    position: relative;
+
+    width: min(var(--card-width), 900px);
+    margin: 22px auto;
+    padding: 24px;
+
+    color: var(--text);
+    background: var(--dark-card);
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.22);
+
+    transition:
+        border-color var(--transition),
+        transform var(--transition),
+        box-shadow var(--transition);
+}
+
+.card:hover {
+    border-color: var(--border-strong);
+    box-shadow: 0 15px 38px rgba(0, 0, 0, 0.35);
+    transform: translateY(-4px);
+}
+
+.card p {
+    color: var(--muted);
+}
+
+.card-badge {
+    position: absolute;
+    top: 12px;
+    right: 15px;
+
+    color: var(--gold);
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+}
+
+
+/* 11. CHARACTERS */
+
+.characters-grid,
+.cast-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 22px;
+
+    width: min(92%, var(--page-width));
+    margin: 35px auto;
+}
+
+.character,
+.character-card,
+.cast-card {
+    position: relative;
+    min-width: 0;
+    padding: 15px;
+
+    text-align: center;
+
+    background: var(--dark-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+
+    overflow: hidden;
+
+    transition:
+        transform var(--transition),
+        border-color var(--transition),
+        box-shadow var(--transition);
+}
+
+.character:hover,
+.character-card:hover,
+.cast-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--gold);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+}
+
+.character img,
+.character-card img,
+.cast-card img {
+    width: 100%;
+    height: 280px;
+
+    object-fit: cover;
+    object-position: center top;
+
+    border-radius: 4px;
+    border: 1px solid rgba(212, 175, 55, 0.18);
+}
+
+.character h3,
+.character-card h3,
+.cast-card h3 {
+    margin: 15px 0 5px;
+    font-size: 1rem;
+}
+
+.character p,
+.character-card p,
+.cast-card p {
+    margin: 6px 0;
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+.character img,
+.character-card img,
+.cast-card img {
+    background: var(--dark-soft);
+}
+
+
+/* Character portraits in circular layouts */
+
+.character-circle {
+    width: 145px;
+    height: 145px;
+    margin: 0 auto 15px;
+
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+
+    object-fit: cover;
+    object-position: center top;
+
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.12);
+}
+
+
+/* 12. SEARCH AND FILTERS */
+
+.search-container {
+    width: min(90%, 600px);
+    margin: 25px auto;
+}
+
+.search-container input,
+.search-input {
+    width: 100%;
+}
+
+input[type="search"],
+input[type="text"],
+input[type="email"],
+select {
+    color: var(--text);
+    background: rgba(15, 15, 15, 0.95);
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #858078;
+}
+
+
+/* 13. TABLES */
+
+table {
+    width: min(92%, 1000px);
+    margin: 30px auto;
+
+    color: var(--text);
+    background: rgba(12, 12, 12, 0.92);
+
+    border-collapse: collapse;
+    border: 1px solid var(--border);
+}
+
+th,
+td {
+    padding: 13px 15px;
+    text-align: left;
+    border: 1px solid var(--border);
+}
+
+th {
+    color: var(--gold-light);
+    background: rgba(212, 175, 55, 0.1);
+
+    font-family: var(--font-heading);
+    font-weight: 600;
+}
+
+tr {
+    transition: background var(--transition);
+}
+
+tbody tr:hover {
+    background: rgba(212, 175, 55, 0.06);
+}
+
+
+/* 14. LISTS */
+
+.lists-container {
+    width: min(85%, 850px);
+    margin: 25px auto;
+    padding: 25px 30px;
+
+    background: var(--dark-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+.lists-container li {
+    margin: 10px 0;
+    padding-left: 5px;
+}
+
+li::marker {
+    color: var(--gold);
+}
+
+
+/* 15. GOSSIP PAGE */
+
+.gossip-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+
+    width: min(92%, var(--page-width));
+    margin: 30px auto;
+}
+
+.gossip-post,
+.gossip-card {
+    padding: 25px;
+
+    background: var(--dark-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+
+    transition: border-color var(--transition);
+}
+
+.gossip-post:hover,
+.gossip-card:hover {
+    border-color: var(--gold);
+}
+
+.gossip-post h2,
+.gossip-post h3,
+.gossip-card h2,
+.gossip-card h3 {
+    font-size: 1.2rem;
+}
+
+.gossip-date {
+    color: var(--gold-muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.gossip-post img,
+.gossip-card img {
+    width: 100%;
+    max-height: 320px;
+    margin-bottom: 15px;
+
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+
+/* 16. GALLERY */
+
+.gallery,
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+
+    width: min(92%, var(--page-width));
+    margin: 30px auto;
+}
+
+.gallery img,
+.gallery-grid img {
+    width: 100%;
+    height: 280px;
+
+    object-fit: cover;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+
+    transition:
+        transform var(--transition),
+        border-color var(--transition),
+        filter var(--transition);
+}
+
+.gallery img:hover,
+.gallery-grid img:hover {
+    transform: scale(1.025);
+    border-color: var(--gold);
+    filter: brightness(1.08);
+}
+
+.gallery a {
+    display: block;
+    overflow: hidden;
+    border-radius: 4px;
+}
+
+
+/* 17. IFRAME */
+
+iframe {
+    display: block;
+
+    width: min(90%, 900px);
+    min-height: 320px;
+
+    margin: 28px auto;
+
+    background: var(--dark-soft);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+
+/* 18. CONTACT FORM */
+
+form {
+    width: min(90%, 650px);
+    margin: 30px auto;
+    padding: 28px;
+
+    background: var(--dark-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+}
+
+form label {
+    display: block;
+    margin: 15px 0 6px;
+
+    color: var(--gold-light);
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+input,
+textarea,
+select {
+    display: block;
+
+    width: 100%;
+    margin: 8px 0 15px;
+    padding: 12px 14px;
+
+    color: var(--text);
+    background: rgba(0, 0, 0, 0.45);
+
+    border: 1px solid var(--border);
+    border-radius: 3px;
+
+    outline: none;
+    transition:
+        border-color var(--transition),
+        box-shadow var(--transition);
+}
+
+textarea {
+    min-height: 140px;
+    resize: vertical;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.08);
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    display: inline-block;
+    width: auto;
+    margin-right: 8px;
+}
+
+form button,
+form .btn {
+    margin-top: 8px;
+}
+
+
+/* 19. FIXED XOXO ELEMENT */
+
+.fixed-gossip {
+    position: fixed;
+    right: 24px;
+    bottom: 22px;
+    z-index: 2000;
+
+    display: inline-block;
+    padding: 10px 17px;
+
+    color: var(--dark);
+    background: var(--gold);
+
+    border: 1px solid var(--gold-light);
+    border-radius: 3px;
+
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.35);
+    transition: all var(--transition);
+}
+
+.fixed-gossip:hover {
+    color: var(--gold-light);
+    background: var(--dark);
+
+    transform: translateY(-3px);
+}
+
+
+/* 20. FOOTER */
+
+footer {
+    position: static;
+
+    margin-top: 50px;
+    padding: 28px 20px;
+
+    text-align: center;
+
+    background: rgba(5, 5, 5, 0.94);
+    border-top: 1px solid var(--border);
+}
+
+footer p {
+    margin: 5px 0;
+    color: var(--muted);
+    font-size: 0.8rem;
+}
+
+footer a {
+    color: var(--gold);
+}
+
+
+/* 21. ANIMATIONS */
+
+@keyframes titleGlow {
+    from {
+        opacity: 0.8;
+        text-shadow: 0 0 5px rgba(212, 175, 55, 0.12);
+    }
+
+    to {
+        opacity: 1;
+        text-shadow: 0 0 24px rgba(212, 175, 55, 0.3);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#main-title {
+    animation: titleGlow 3s ease-in-out infinite alternate;
+}
+
+.card,
+.character,
+.character-card,
+.cast-card,
+.gossip-post,
+.gossip-card {
+    animation: fadeIn 0.45s ease both;
+}
+
+
+/* 22. RESPONSIVE: TABLETS */
+
+@media (max-width: 1000px) {
+    .characters-grid,
+    .cast-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .gallery,
+    .gallery-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .sidebar {
+        width: 200px;
+    }
+
+    .sidebar + main,
+    .has-sidebar main {
+        margin-left: 200px;
+    }
+
+    .character img,
+    .character-card img,
+    .cast-card img {
+        height: 240px;
+    }
+}
+
+
+/* 23. RESPONSIVE: MOBILE */
+
+@media (max-width: 650px) {
+    body {
+        background-attachment: scroll;
+    }
+
+    header {
+        padding: 13px 16px;
+    }
+
+    #main-title {
+        font-size: 1.6rem;
+        letter-spacing: 0.07em;
+    }
+
+    nav {
+        gap: 6px 16px;
+    }
+
+    nav a {
+        font-size: 0.68rem;
+    }
+
+    main {
+        padding-bottom: 25px;
+    }
+
+    section {
+        margin-bottom: 35px;
+    }
+
+    .page-title {
+        margin: 25px 12px 18px;
+    }
+
+    .hero {
+        min-height: 52vh;
+        padding: 50px 18px;
+    }
+
+    .hero h1 {
+        font-size: clamp(2rem, 10vw, 3.3rem);
+    }
+
+    .card {
+        width: 92%;
+        padding: 18px;
+    }
+
+    .characters-grid,
+    .cast-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+        width: 92%;
+    }
+
+    .character,
+    .character-card,
+    .cast-card {
+        padding: 10px;
+    }
+
+    .character img,
+    .character-card img,
+    .cast-card img {
+        height: 190px;
+    }
+
+    .character h3,
+    .character-card h3,
+    .cast-card h3 {
+        font-size: 0.9rem;
+    }
+
+    .gallery,
+    .gallery-grid,
+    .gossip-grid {
+        grid-template-columns: 1fr;
+        width: 92%;
+        gap: 15px;
+    }
+
+    .gallery img,
+    .gallery-grid img {
+        height: 250px;
+    }
+
+    .video {
+        width: 92%;
+    }
+
+    .lists-container {
+        width: 92%;
+        padding: 18px;
+    }
+
+    table {
+        width: 95%;
+        font-size: 0.8rem;
+    }
+
+    th,
+    td {
+        padding: 9px;
+    }
+
+    form {
+        width: 92%;
+        padding: 20px;
+    }
+
+    .fixed-gossip {
+        right: 12px;
+        bottom: 12px;
+        padding: 9px 13px;
+        font-size: 0.7rem;
+    }
+
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        padding: 15px;
+
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar nav {
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 6px 16px;
+    }
+
+    .sidebar + main,
+    .has-sidebar main {
+        margin-left: 0;
+    }
+}
+
+
+/* 24. SMALL MOBILE SCREENS */
+
+@media (max-width: 380px) {
+    .characters-grid,
+    .cast-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .character img,
+    .character-card img,
+    .cast-card img {
+        height: 280px;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    nav {
+        gap: 5px 12px;
+    }
+}
+
+
+/* 25. ACCESSIBILITY */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

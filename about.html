@@ -1,0 +1,680 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="author" content="Nour Elsayed">
+    <meta name="description"
+          content="Discover the story, characters, secrets, and scandals of Gossip Girl.">
+
+    <title>Gossip Girl | About</title>
+
+    <link rel="icon" type="image/jpeg" href="images/girl.jpg">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <style>
+        :root {
+            --black: #090909;
+            --panel: #121212;
+            --gold: #d8bb78;
+            --light-gold: #f0dfae;
+            --white: #f8f5ef;
+            --muted: #aaa39a;
+            --border: rgba(216, 187, 120, .25);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--black);
+            color: var(--white);
+            font-family: "Montserrat", sans-serif;
+            overflow-x: hidden;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .city-background {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background:
+                radial-gradient(ellipse at 15% 80%, rgba(150,106,36,.15), transparent 40%),
+                radial-gradient(ellipse at 80% 20%, rgba(110,85,46,.12), transparent 38%),
+                linear-gradient(180deg, #080808, #15120d 70%, #080808);
+        }
+
+        .city-background::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            opacity: .55;
+            background:
+                radial-gradient(circle at 12% 18%, #d8bb78 0 1px, transparent 2px),
+                radial-gradient(circle at 77% 31%, #f0dfae 0 1px, transparent 2px),
+                radial-gradient(circle at 43% 12%, #d8bb78 0 1px, transparent 2px),
+                radial-gradient(circle at 89% 68%, #d8bb78 0 1px, transparent 2px),
+                radial-gradient(circle at 22% 55%, #f0dfae 0 1px, transparent 2px);
+            background-size: 190px 180px, 240px 210px, 280px 260px,
+                             230px 220px, 300px 270px;
+        }
+
+        .city-background::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 25vh;
+            opacity: .2;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent 0 24px,
+                rgba(216,187,120,.22) 25px 27px,
+                transparent 28px 52px
+            );
+            clip-path: polygon(
+                0 35%,4% 35%,4% 10%,8% 10%,8% 42%,
+                12% 42%,12% 20%,17% 20%,17% 48%,
+                22% 48%,22% 4%,27% 4%,27% 38%,
+                32% 38%,32% 22%,37% 22%,37% 50%,
+                42% 50%,42% 15%,48% 15%,48% 40%,
+                53% 40%,53% 5%,58% 5%,58% 35%,
+                63% 35%,63% 19%,69% 19%,69% 45%,
+                75% 45%,75% 9%,80% 9%,80% 39%,
+                86% 39%,86% 20%,91% 20%,91% 45%,
+                96% 45%,96% 12%,100% 12%,100% 100%,0 100%
+            );
+        }
+
+        /* SAME LAYOUT AS HOME */
+
+        .page-layout {
+            width: min(1500px, 100%);
+            min-height: 100vh;
+            margin: auto;
+            padding: 32px 38px;
+
+            display: grid;
+            grid-template-columns: 190px minmax(0, 1fr) 125px;
+            gap: 30px;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 34px;
+            padding: 10px 0;
+        }
+
+        .brand {
+            color: var(--gold);
+            font: 600 1.3rem/1.5 "Cinzel", serif;
+            letter-spacing: 2px;
+        }
+
+        .brand small {
+            display: block;
+            color: var(--muted);
+            font: 9px "Montserrat", sans-serif;
+            letter-spacing: 3px;
+        }
+
+        nav {
+            display: flex;
+            flex-direction: column;
+            gap: 23px;
+            width: 100%;
+        }
+
+        nav a {
+            color: #c9c2b8;
+            font-size: .72rem;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+            transition: color .2s;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: var(--light-gold);
+        }
+
+        nav a.active::before {
+            content: "✦";
+            margin-right: 8px;
+            color: var(--gold);
+        }
+
+        .sidebar-note {
+            margin-top: auto;
+            max-width: 175px;
+            color: var(--muted);
+            font: .75rem/1.9 "Cinzel", serif;
+        }
+
+        .sidebar-note span {
+            color: var(--gold);
+        }
+
+        /* ABOUT CONTENT */
+
+        .main-content {
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 25px 0;
+        }
+
+        .eyebrow {
+            margin-bottom: 20px;
+            color: var(--gold);
+            font-size: .67rem;
+            letter-spacing: 3.5px;
+            text-transform: uppercase;
+        }
+
+        .hero-title {
+            margin-bottom: 22px;
+            font: 500 clamp(2.5rem, 4.4vw, 4.5rem)/1.15 "Cinzel", serif;
+            letter-spacing: -1px;
+        }
+
+        .hero-title span {
+            display: block;
+            color: var(--gold);
+        }
+
+        .hero-description {
+            max-width: 540px;
+            color: #c2bbb1;
+            font-size: .86rem;
+            line-height: 1.95;
+        }
+
+        .hero-divider {
+            width: 100%;
+            max-width: 490px;
+            height: 1px;
+            margin: 26px 0;
+            background: linear-gradient(90deg, var(--gold), transparent);
+            opacity: .5;
+        }
+
+        .about-block {
+            margin-bottom: 22px;
+        }
+
+        .about-block h2 {
+            margin-bottom: 10px;
+            color: var(--light-gold);
+            font: 500 1rem "Cinzel", serif;
+            letter-spacing: 1.5px;
+        }
+
+        .about-block p {
+            max-width: 560px;
+            color: #c2bbb1;
+            font-size: .79rem;
+            line-height: 1.9;
+        }
+
+        .about-list {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .about-list span {
+            padding: 12px;
+            color: #ded5c8;
+            background: rgba(18,18,18,.72);
+            border: 1px solid var(--border);
+            font-size: .7rem;
+            letter-spacing: .5px;
+        }
+
+        .about-list span::before {
+            content: "✦";
+            margin-right: 8px;
+            color: var(--gold);
+        }
+
+        .quote {
+            color: #e4d6b7;
+            font: .9rem/1.8 "Cinzel", serif;
+        }
+
+        .quote small {
+            display: block;
+            margin-top: 5px;
+            color: var(--muted);
+            font: .62rem "Montserrat", sans-serif;
+            letter-spacing: 2px;
+        }
+
+        /* RIGHT RAIL */
+
+        .cast-rail {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 22px;
+        }
+
+        .rail-title {
+            color: var(--gold);
+            font: .7rem "Cinzel", serif;
+            letter-spacing: 2px;
+        }
+
+        .cast-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            text-align: center;
+            transition: transform .2s;
+        }
+
+        .cast-link:hover {
+            transform: scale(1.05);
+        }
+
+        .cast-circle {
+            display: grid;
+            place-items: center;
+            width: 82px;
+            height: 82px;
+            overflow: hidden;
+            border: 1px solid var(--gold);
+            border-radius: 50%;
+            background: #211b11;
+            color: var(--gold);
+            font: 1.4rem "Cinzel", serif;
+        }
+
+        .cast-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cast-name {
+            max-width: 120px;
+            color: #ded5c8;
+            font-size: .62rem;
+            letter-spacing: .6px;
+            line-height: 1.5;
+            text-transform: uppercase;
+        }
+
+        /* EXPLORE SECTION */
+
+        .explore-section {
+            grid-column: 1 / -1;
+            padding: 25px 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .section-title {
+            margin-bottom: 10px;
+            color: var(--gold);
+            font: 500 1.3rem "Cinzel", serif;
+            letter-spacing: 2px;
+        }
+
+        .section-description {
+            margin-bottom: 20px;
+            color: var(--muted);
+            font-size: .78rem;
+            line-height: 1.8;
+        }
+
+        .explore-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
+        .action {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 42px;
+            padding: 0 16px;
+            border: 1px solid var(--gold);
+            color: var(--light-gold);
+            font-size: .65rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: .2s;
+        }
+
+        .action:hover {
+            background: var(--gold);
+            color: #111;
+            transform: translateY(-2px);
+        }
+
+        iframe {
+            display: block;
+            width: 100%;
+            height: 560px;
+            border: 1px solid var(--border);
+            background: var(--black);
+        }
+
+        .fixed-gossip {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 5;
+            padding: 11px 16px;
+            border: 1px solid var(--gold);
+            background: rgba(9,9,9,.9);
+            color: var(--gold);
+            font: 600 .8rem "Cinzel", serif;
+            letter-spacing: 1px;
+        }
+
+        footer {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            font-size: .68rem;
+            letter-spacing: .8px;
+        }
+
+        footer strong {
+            color: var(--gold);
+            font-weight: 500;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 1000px) {
+            .page-layout {
+                grid-template-columns: 155px minmax(0, 1fr);
+                gap: 24px;
+                padding: 26px;
+            }
+
+            .cast-rail {
+                grid-column: 1 / -1;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: flex-start;
+                padding: 20px 0;
+                border-top: 1px solid var(--border);
+            }
+
+            .rail-title {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 620px) {
+            .page-layout {
+                display: flex;
+                flex-direction: column;
+                gap: 28px;
+                padding: 22px 18px;
+            }
+
+            .sidebar {
+                gap: 18px;
+            }
+
+            nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 14px 17px;
+            }
+
+            nav a {
+                font-size: .63rem;
+            }
+
+            nav a.active::before {
+                display: none;
+            }
+
+            .sidebar-note {
+                display: none;
+            }
+
+            .main-content {
+                padding: 15px 0;
+            }
+
+            .hero-title {
+                font-size: clamp(2.3rem, 10vw, 3.8rem);
+            }
+
+            .about-list {
+                grid-template-columns: 1fr;
+            }
+
+            .cast-circle {
+                width: 64px;
+                height: 64px;
+            }
+
+            .cast-link {
+                max-width: 82px;
+            }
+
+            .cast-name {
+                font-size: .56rem;
+            }
+
+            iframe {
+                height: 460px;
+            }
+
+            footer {
+                flex-direction: column;
+            }
+
+            .fixed-gossip {
+                right: 12px;
+                bottom: 12px;
+                font-size: .7rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="city-background" aria-hidden="true"></div>
+
+    <div class="page-layout">
+
+        <!-- SAME SIDEBAR AS HOME -->
+        <aside class="sidebar">
+
+            <a href="index.html" class="brand">
+                GOSSIP GIRL
+                <small>UPPER EAST SIDE</small>
+            </a>
+
+            <nav aria-label="Main navigation">
+                <a href="index.html">Home</a>
+                <a class="active" href="about.html" aria-current="page">About</a>
+                <a href="characters.html">Characters</a>
+                <a href="gossip.html">Gossip</a>
+                <a href="gallery.html">Gallery</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+
+            <p class="sidebar-note">
+                You know you love me.
+                <br>
+                <span>XOXO, Gossip Girl.</span>
+            </p>
+
+        </aside>
+
+
+        <!-- ABOUT CONTENT -->
+        <main class="main-content">
+
+            <p class="eyebrow">Beyond the Headlines</p>
+
+            <h1 class="hero-title">
+                WELCOME TO
+                <span>THE UPPER EAST SIDE.</span>
+            </h1>
+
+            <p class="hero-description">
+                Behind the designer outfits and picture-perfect lives,
+                there's a world of secrets, complicated relationships,
+                unexpected betrayals, and stories waiting to be exposed.
+            </p>
+
+            <div class="hero-divider"></div>
+
+            <section class="about-block">
+                <h2>The Series</h2>
+
+                <p>
+                    Gossip Girl follows a group of wealthy teenagers
+                    living on Manhattan's Upper East Side. Their lives
+                    are watched by an anonymous blogger who reveals
+                    the secrets everyone else wants to keep hidden.
+                </p>
+            </section>
+
+            <section class="about-block">
+                <h2>The Mystery</h2>
+
+                <p>
+                    Nobody knows who Gossip Girl really is. One post can
+                    change a friendship, expose a relationship, or turn
+                    the entire social scene upside down.
+                </p>
+            </section>
+
+            <section class="about-block">
+                <h2>Inside This World</h2>
+
+                <div class="about-list">
+                    <span>Characters & Friendships</span>
+                    <span>Secrets & Scandals</span>
+                    <span>Love & Rivalries</span>
+                    <span>Iconic Moments</span>
+                </div>
+            </section>
+
+            <div class="hero-divider"></div>
+
+            <p class="quote">
+                Every story has a secret.
+                <small>XOXO, GOSSIP GIRL</small>
+            </p>
+
+        </main>
+
+
+        <!-- SAME RIGHT RAIL AS HOME -->
+        <aside class="cast-rail">
+
+            <p class="rail-title">THE ELITE</p>
+
+            <a class="cast-link" href="characters.html">
+                <div class="cast-circle">B</div>
+                <span class="cast-name">Blair Waldorf</span>
+            </a>
+
+            <a class="cast-link" href="characters.html">
+                <div class="cast-circle">S</div>
+                <span class="cast-name">Serena van der Woodsen</span>
+            </a>
+
+            <a class="cast-link" href="characters.html">
+                <div class="cast-circle">C</div>
+                <span class="cast-name">Chuck Bass</span>
+            </a>
+
+            <p class="section-description">
+                Every name has a story.
+            </p>
+
+        </aside>
+
+
+        <!-- EXPLORE FRAME -->
+        <section class="explore-section">
+
+            <h2 class="section-title">EXPLORE THE INNER CIRCLE</h2>
+
+            <p class="section-description">
+                Choose a page to explore it inside this window.
+            </p>
+
+            <div class="explore-links">
+                <a href="characters.html" target="infoFrame"
+                   class="action">Characters</a>
+
+                <a href="gossip.html" target="infoFrame"
+                   class="action">Gossip</a>
+
+                <a href="gallery.html" target="infoFrame"
+                   class="action">Gallery</a>
+            </div>
+
+            <iframe
+                name="infoFrame"
+                src="characters.html"
+                title="Explore Gossip Girl pages"
+                loading="lazy">
+            </iframe>
+
+        </section>
+
+
+        <footer>
+            <p>MANHATTAN IS NEVER SHORT OF SECRETS.</p>
+            <p><strong>XOXO, GOSSIP GIRL</strong> · FAN-MADE WEBSITE</p>
+        </footer>
+
+    </div>
+
+    <a href="gossip.html" class="fixed-gossip">💋 XOXO</a>
+
+</body>
+</html>
